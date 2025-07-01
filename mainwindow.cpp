@@ -33,6 +33,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->pushButton_showROI->setEnabled(false);
 
     setTTF();
+
+    connect(this, &MainWindow::add_log_signal, this, &MainWindow::add_log_even);
+    connect(this, &MainWindow::clean_log_signal, this, &MainWindow::clean_log_even);
 }
 
 MainWindow::~MainWindow()
@@ -335,11 +338,32 @@ void MainWindow::setTTF()
     ui->pushButton_min->setStyleSheet(styleSheetPushButton);
     ui->pushButton_max->setStyleSheet(styleSheetPushButton);
     ui->pushButton_close->setStyleSheet(styleSheetPushButton);
+    ui->label_log_region->setStyleSheet(styleSheetLabel);
 
 
     ui->pushButton_min->setText(QChar(0xe65a));
     ui->pushButton_max->setText(QChar(0xe653));
     ui->pushButton_close->setText(QChar(0xeca0));
+    ui->label_log_region->setText(QChar(0xe654));
+
+}
+
+void MainWindow::Append(const QString &text)
+{
+    emit add_log_signal(text);
+}
+
+void MainWindow::add_log_even(QString message)
+{
+    QString old_message = ui->textEdit_log->toPlainText();
+    //    message = message + "\n" + old_message;
+    message = message  + QString(old_message.toStdString().substr(0, 5000).data());
+    ui->textEdit_log->setText(message);
+}
+
+void MainWindow::clean_log_even()
+{
+    ui->textEdit_log->clear();
 }
 
 void MainWindow::on_pushButton_readJsonFile_clicked()
@@ -552,6 +576,7 @@ void MainWindow::on_pushButton_runNext_clicked()
     // LOGE("savePath:%s", savePath.data());
     cv::imwrite(savePath, ROIImg);
 
+    LOGE("run finish");
 }
 
 

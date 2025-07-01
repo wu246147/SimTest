@@ -30,6 +30,8 @@ set(PROJECT_SOURCES
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
+        algorithm/qtstreambuf.h
+        algorithm/qtstreambuf.cpp
 )
 
 add_executable(TrainDataPara

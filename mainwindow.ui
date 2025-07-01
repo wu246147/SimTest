@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1126</width>
-    <height>744</height>
+    <height>935</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -42,214 +42,6 @@ QTabBar::tab::selected
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2" columnstretch="0,0">
-    <item row="1" column="0" colspan="2">
-     <layout class="QGridLayout" name="gridLayout" rowstretch="0" columnstretch="3,5">
-      <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="verticalSpacing">
-       <number>6</number>
-      </property>
-      <item row="0" column="0">
-       <widget class="QWidget" name="widget" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(21, 74, 152);</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <property name="topMargin">
-          <number>25</number>
-         </property>
-         <property name="horizontalSpacing">
-          <number>6</number>
-         </property>
-         <property name="verticalSpacing">
-          <number>25</number>
-         </property>
-         <item row="3" column="0">
-          <widget class="QPushButton" name="pushButton_showROI">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>显示检测框</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label">
-           <property name="text">
-            <string>保存结果路径</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton_readJsonFile">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>打开参数文件</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QPushButton" name="pushButton_runNext">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>下一张</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_imgDir">
-           <property name="text">
-            <string>D:\data\defectData\123\Cam1_test</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_saveDir">
-           <property name="text">
-            <string>D:\data\defectData\123\Cam1_process</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>图片文件路径</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QPushButton" name="pushButton_runAll">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>遍历所有图片</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLineEdit" name="lineEdit_jsonFile">
-           <property name="text">
-            <string>E:\code\project\Wuhan_Painting_Inspection\Painting_Defect_Detect\main_program\build\Desktop_Qt_5_15_2_MSVC2019_64bit-Release\job_file\123\cam2_ToolPara.json</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="pushButton_showImage">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>显示图片</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QLabel" name="label_id">
-           <property name="text">
-            <string>-1</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QWidget" name="widget_2" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(21, 74, 152);</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
     <item row="0" column="0">
      <widget class="QWidget" name="widget_17" native="true">
       <property name="minimumSize">
@@ -447,7 +239,7 @@ color: #FFFFFF;</string>
           <enum>Qt::AutoText</enum>
          </property>
          <property name="pixmap">
-          <pixmap resource="../Painting_Defect_Detect/main_program/Image.qrc">:/Image/img/Logo.png</pixmap>
+          <pixmap>:/Image/img/Logo.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -470,22 +262,331 @@ color: #FFFFFF;</string>
       </layout>
      </widget>
     </item>
+    <item row="1" column="0" colspan="2">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="3,5">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="verticalSpacing">
+       <number>6</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QWidget" name="widget" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(21, 74, 152);</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <property name="topMargin">
+          <number>25</number>
+         </property>
+         <property name="horizontalSpacing">
+          <number>6</number>
+         </property>
+         <property name="verticalSpacing">
+          <number>25</number>
+         </property>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="pushButton_showROI">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>显示检测框</string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>保存结果路径</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButton_readJsonFile">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>打开参数文件</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QPushButton" name="pushButton_runNext">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>下一张</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_imgDir">
+           <property name="text">
+            <string>D:\data\defectData\123\Cam1_test</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QPushButton" name="pushButton_showImage">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>显示图片</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="4" column="1">
+          <widget class="QLineEdit" name="lineEdit_saveDir">
+           <property name="text">
+            <string>D:\data\defectData\123\Cam1_process</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="1">
+          <widget class="QLabel" name="label_id">
+           <property name="text">
+            <string>-1</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>图片文件路径</string>
+           </property>
+          </widget>
+         </item>
+         <item row="7" column="0">
+          <widget class="QPushButton" name="pushButton_runAll">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>遍历所有图片</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="lineEdit_jsonFile">
+           <property name="text">
+            <string>E:\code\project\Wuhan_Painting_Inspection\Painting_Defect_Detect\main_program\build\Desktop_Qt_5_15_2_MSVC2019_64bit-Release\job_file\123\cam2_ToolPara.json</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QWidget" name="widget_5" native="true">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>151</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(21, 74, 152);</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>2</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
+          <number>2</number>
+         </property>
+         <item row="0" column="0">
+          <widget class="QWidget" name="widget_10" native="true">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>35</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">border-bottom: 2px solid #808080;</string>
+           </property>
+           <widget class="QLabel" name="label_3">
+            <property name="geometry">
+             <rect>
+              <x>40</x>
+              <y>0</y>
+              <width>91</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="font">
+             <font>
+              <family>Microsoft YaHei UI</family>
+              <pointsize>14</pointsize>
+              <italic>false</italic>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-bottom: 0px solid #FFFFFF;</string>
+            </property>
+            <property name="text">
+             <string>日志信息</string>
+            </property>
+           </widget>
+           <widget class="QLabel" name="label_log_region">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>0</y>
+              <width>31</width>
+              <height>31</height>
+             </rect>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">border-bottom: 0px solid #FFFFFF;
+color: rgb(0, 120, 220);</string>
+            </property>
+            <property name="text">
+             <string>L</string>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QWidget" name="widget_11" native="true">
+           <layout class="QGridLayout" name="gridLayout_9">
+            <property name="bottomMargin">
+             <number>9</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QTextEdit" name="textEdit_log">
+              <property name="font">
+               <font>
+                <family>Microsoft YaHei UI</family>
+                <pointsize>14</pointsize>
+                <italic>false</italic>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">border-bottom: 0px solid #FFFFFF;</string>
+              </property>
+              <property name="readOnly">
+               <bool>false</bool>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </item>
+      <item row="0" column="1" rowspan="2">
+       <widget class="QWidget" name="widget_2" native="true">
+        <property name="styleSheet">
+         <string notr="true">background-color: rgb(21, 74, 152);</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
    </layout>
   </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>1126</width>
-     <height>29</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="../Painting_Defect_Detect/main_program/Image.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

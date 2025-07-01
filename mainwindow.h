@@ -13,6 +13,7 @@
 #include <opencv2/opencv.hpp>
 #include "imgPorcessTool.h"
 #include "mylog.h"
+#include "algorithm/qtstreambuf.h"
 //交互库
 #include "mygraphicrectitem.h"
 #include "mygraphicsview.h"
@@ -47,6 +48,8 @@ public:
 
 
     void setTTF();
+
+    void Append(const QString &text);
 
     /***
      * 公有参数
@@ -96,10 +99,24 @@ public:
     QPoint window_pos;
     QPoint mouse_pos;
 
+    /*
+     * 信号槽
+     */
+signals:
+    ///
+    /// \brief add_log_signal 添加日志信号
+    /// \param message 添加日志
+    ///
+    void add_log_signal(QString message);
+
+    ///
+    /// \brief clean_log_signal 清空日志信号
+    ///
+    void clean_log_signal();
+
     /***
      * 事件
      ***/
-
 private slots:
     void on_pushButton_readJsonFile_clicked();
 
@@ -125,6 +142,9 @@ private slots:
 
     void  mouseMoveEvent(QMouseEvent* event) override;
 
+    void add_log_even(QString message);
+
+    void clean_log_even();
 
 private:
     Ui::MainWindow *ui;
