@@ -152,8 +152,8 @@ void MainWindow::runCaliper(bool isShow = false)
             ROIList.push_back(caliperROISmall);
         }
         /// 卡尺边缘定位
-        CaliperLocation(medianImg, ROIList, caliperPolarityList, caliperSelectPositionList,
-                        caliperThreList, locationAngle, locationPoint, caliperResults, caliperLocationOriginPoints);
+        ImgAlg::CaliperLocation(medianImg, ROIList, caliperPolarityList, caliperSelectPositionList,
+                                caliperThreList, locationAngle, locationPoint, caliperResults, caliperLocationOriginPoints);
         /// 结果显示
         if(isShow)
         {
@@ -193,9 +193,9 @@ void MainWindow::runCaliper(bool isShow = false)
         // anormalROICorrect.center = anormalROI.center + locationPoint * 8;
         modelROITransform.angle = modelROI.angle + locationAngle;
         cv::Mat H;
-        getTransform((locationPoint * 8).x, (locationPoint * 8).y, locationAngle, cv::Point2f(0, 0), H);
+        ImgAlg::getTransform((locationPoint * 8).x, (locationPoint * 8).y, locationAngle, cv::Point2f(0, 0), H);
         cv::Point2f abnormalROICorrectCenter;
-        transformPoint(H, modelROI.center, abnormalROICorrectCenter);
+        ImgAlg::transformPoint(H, modelROI.center, abnormalROICorrectCenter);
         modelROITransform.center = abnormalROICorrectCenter;
 
         if(isShow)
@@ -223,7 +223,7 @@ void MainWindow::runCaliper(bool isShow = false)
             return;
         }
         //截取图片
-        transformImgFromRotateRect(modelROITransform, img, ROIImg);
+        ImgAlg::transformImgFromRotateRect(modelROITransform, img, ROIImg);
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         // LOGE("Caliper location image total use time: %d ms", duration);

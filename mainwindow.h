@@ -11,7 +11,8 @@
 
 //图像算法库
 #include <opencv2/opencv.hpp>
-#include "imgPorcessTool.h"
+#include "imgprocesstool.h"
+#include "calipertool.h"
 #include "mylog.h"
 #include "algorithm/qtstreambuf.h"
 //交互库
