@@ -32,7 +32,7 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
 set(Qt5_DIR   "/home/dell/Qt5.14.2/5.14.2/gcc_64/lib/cmake/Qt5")
 elseif(CMAKE_SYSTEM_NAME MATCHES "Windows")
 endif()
-find_package(Qt5 COMPONENTS Widgets Xml Concurrent Network Sql Charts REQUIRED)
+find_package(Qt5 COMPONENTS Widgets Xml Concurrent Network Sql Charts Concurrent REQUIRED)
 
 
 #Threads
@@ -83,6 +83,12 @@ set(PROJECT_SOURCES
         algorithm/qtstreambuf.cpp
         mytextitem.cpp
         mytextitem.h
+        jobmanager.cpp
+        jobmanager.h
+        jobworker.cpp
+        jobworker.h
+        algorithm/tool.h
+        algorithm/tool.cpp
 )
 
 add_executable(SimTest
@@ -90,7 +96,7 @@ add_executable(SimTest
 )
 
 
-target_link_libraries(SimTest Qt5::Widgets Qt5::Xml Qt5::Concurrent Qt5::Network Qt5::Sql Qt5::Charts)
+target_link_libraries(SimTest Qt5::Widgets Qt5::Xml Qt5::Concurrent Qt5::Network Qt5::Sql Qt5::Charts Qt5::Concurrent)
 target_link_libraries(SimTest  ${OPENCV_LIBS} ${ALGORITHM_LIBS} )
 target_link_libraries(SimTest nvinfer)
 target_link_libraries(SimTest ${CUDA_LIBRARIES})
