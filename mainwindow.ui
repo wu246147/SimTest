@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1126</width>
-    <height>935</height>
+    <height>1032</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -194,7 +194,7 @@ QTabBar::tab::selected
           </font>
          </property>
          <property name="text">
-          <string>粉烤件外观缺陷AI数据导出系统</string>
+          <string>粉烤件外观缺陷AI算法测试平台</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
@@ -239,7 +239,7 @@ color: #FFFFFF;</string>
           <enum>Qt::AutoText</enum>
          </property>
          <property name="pixmap">
-          <pixmap>:/Image/img/Logo.png</pixmap>
+          <pixmap resource="Image.qrc">:/Image/img/Logo.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>
@@ -263,7 +263,7 @@ color: #FFFFFF;</string>
      </widget>
     </item>
     <item row="1" column="0" colspan="2">
-     <layout class="QGridLayout" name="gridLayout" rowstretch="0,0" columnstretch="3,5">
+     <layout class="QGridLayout" name="gridLayout" rowstretch="4,2" columnstretch="3,5">
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -275,7 +275,7 @@ color: #FFFFFF;</string>
         <property name="styleSheet">
          <string notr="true">background-color: rgb(21, 74, 152);</string>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
+        <layout class="QGridLayout" name="gridLayout_3" columnstretch="1,1,0">
          <property name="topMargin">
           <number>25</number>
          </property>
@@ -283,10 +283,10 @@ color: #FFFFFF;</string>
           <number>6</number>
          </property>
          <property name="verticalSpacing">
-          <number>25</number>
+          <number>5</number>
          </property>
-         <item row="3" column="0">
-          <widget class="QPushButton" name="pushButton_showROI">
+         <item row="8" column="0">
+          <widget class="QPushButton" name="pushButton_run">
            <property name="styleSheet">
             <string notr="true">QPushButton
 {
@@ -304,14 +304,340 @@ QPushButton:pressed
 }</string>
            </property>
            <property name="text">
-            <string>显示检测框</string>
+            <string>运行当前图片</string>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="0" colspan="3">
+          <widget class="QScrollArea" name="scrollArea">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>300</height>
+            </size>
+           </property>
+           <property name="sizeIncrement">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="baseSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="widgetResizable">
+            <bool>true</bool>
+           </property>
+           <widget class="QWidget" name="scrollAreaWidgetContents">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>0</y>
+              <width>379</width>
+              <height>536</height>
+             </rect>
+            </property>
+            <layout class="QGridLayout" name="gridLayout_4">
+             <item row="1" column="0">
+              <widget class="QLabel" name="label_20">
+               <property name="text">
+                <string>二值化阈值</string>
+               </property>
+              </widget>
+             </item>
+             <item row="1" column="1">
+              <widget class="QSpinBox" name="spinBox_maskThre">
+               <property name="toolTip">
+                <string>二值化处理，用于计算检测区域</string>
+               </property>
+               <property name="maximum">
+                <number>255</number>
+               </property>
+               <property name="displayIntegerBase">
+                <number>10</number>
+               </property>
+              </widget>
+             </item>
+             <item row="2" column="0" colspan="2">
+              <widget class="QGroupBox" name="groupBox_12">
+               <property name="title">
+                <string>有监督目标检测参数</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_19" columnstretch="1,0,0">
+                <item row="4" column="1" colspan="2">
+                 <widget class="QSpinBox" name="spinBox_filter_defeat_area">
+                  <property name="minimum">
+                   <number>10</number>
+                  </property>
+                  <property name="maximum">
+                   <number>999999999</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1" colspan="2">
+                 <widget class="QSpinBox" name="spinBox_cutSize">
+                  <property name="maximum">
+                   <number>2048</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_isDefectDet">
+                  <property name="text">
+                   <string>启用</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_69">
+                  <property name="text">
+                   <string>缺陷大小限制</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_15">
+                  <property name="text">
+                   <string>切割图片大小</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1" colspan="2">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_thre">
+                  <property name="minimum">
+                   <double>0.250000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>1.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1" colspan="2">
+                 <widget class="QSpinBox" name="spinBox_overlappingSize">
+                  <property name="maximum">
+                   <number>640</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_17">
+                  <property name="text">
+                   <string>阈值</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_16">
+                  <property name="text">
+                   <string>重叠图片大小</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item row="3" column="0" colspan="2">
+              <widget class="QGroupBox" name="groupBox_13">
+               <property name="title">
+                <string>无监督目标检测参数</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_20">
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_27">
+                  <property name="text">
+                   <string>重叠图片大小</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_70">
+                  <property name="text">
+                   <string>缺陷大小限制</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_71">
+                  <property name="text">
+                   <string>边缘缺陷过滤</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="1">
+                 <widget class="QSpinBox" name="spinBox_filter_defeat_area_abnormal">
+                  <property name="minimum">
+                   <number>10</number>
+                  </property>
+                  <property name="maximum">
+                   <number>999999999</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_isUseAbnormal">
+                  <property name="text">
+                   <string>启用</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QSpinBox" name="spinBox_AbnormalOverlappingSize">
+                  <property name="maximum">
+                   <number>640</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="text">
+                   <string>切割图片大小</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_AbnormalThre">
+                  <property name="minimum">
+                   <double>0.250000000000000</double>
+                  </property>
+                  <property name="maximum">
+                   <double>1.000000000000000</double>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QSpinBox" name="spinBox_side_filter_size">
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="spinBox_AbnormalCutSize">
+                  <property name="maximum">
+                   <number>2048</number>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="label_29">
+                  <property name="text">
+                   <string>阈值</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="text">
+            <string>无监督模型路径</string>
+           </property>
+          </widget>
+         </item>
+         <item row="12" column="0">
+          <widget class="QPushButton" name="pushButton_savePara">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>保存参数</string>
+           </property>
+          </widget>
+         </item>
+         <item row="6" column="0">
+          <widget class="QPushButton" name="pushButton_showImage">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>显示图片</string>
            </property>
           </widget>
          </item>
          <item row="4" column="0">
-          <widget class="QLabel" name="label">
+          <widget class="QPushButton" name="pushButton_initModel">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
            <property name="text">
-            <string>保存结果路径</string>
+            <string>打开模型</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_4">
+           <property name="text">
+            <string>有监督模型路径</string>
+           </property>
+          </widget>
+         </item>
+         <item row="13" column="0">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLabel" name="label_2">
+           <property name="text">
+            <string>图片文件路径</string>
            </property>
           </widget>
          </item>
@@ -338,97 +664,30 @@ QPushButton:pressed
            </property>
           </widget>
          </item>
-         <item row="6" column="0">
-          <widget class="QPushButton" name="pushButton_runNext">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>下一张</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLineEdit" name="lineEdit_imgDir">
-           <property name="text">
-            <string>D:\data\defectData\123\Cam1_test</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="pushButton_showImage">
-           <property name="styleSheet">
-            <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-           </property>
-           <property name="text">
-            <string>显示图片</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLineEdit" name="lineEdit_saveDir">
-           <property name="text">
-            <string>D:\data\defectData\123\Cam1_process</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QLabel" name="label_id">
-           <property name="text">
-            <string>-1</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="label_2">
-           <property name="text">
-            <string>图片文件路径</string>
-           </property>
-          </widget>
-         </item>
          <item row="7" column="0">
+          <widget class="QPushButton" name="pushButton_showROI">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>显示检测框</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
           <widget class="QPushButton" name="pushButton_runAll">
            <property name="styleSheet">
             <string notr="true">QPushButton
@@ -451,10 +710,117 @@ QPushButton:pressed
            </property>
           </widget>
          </item>
+         <item row="9" column="0">
+          <widget class="QPushButton" name="pushButton_reset">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>复位</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="0">
+          <widget class="QPushButton" name="pushButton_runLast">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>上一张</string>
+           </property>
+          </widget>
+         </item>
+         <item row="8" column="1">
+          <widget class="QCheckBox" name="checkBox_isshow">
+           <property name="text">
+            <string>显示检测过程</string>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QLabel" name="label_id">
+           <property name="text">
+            <string>-1</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="1">
+          <widget class="QPushButton" name="pushButton_runNext">
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>下一张</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="1">
+          <widget class="QLineEdit" name="lineEdit_unsuperviseModel">
+           <property name="text">
+            <string>E:\code\project\Wuhan_Painting_Inspection\anomalyDet\model_0908\Cam4\cam4_630_e100_apimo_without_labels_simpl.onnx</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
+          <widget class="QLineEdit" name="lineEdit_superviseModel">
+           <property name="text">
+            <string>E:\code\project\Wuhan_Painting_Inspection\defectDet\side_123456789ab\cam45678\best.wts</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="1">
+          <widget class="QLineEdit" name="lineEdit_imgDir">
+           <property name="text">
+            <string>E:\data\Wuhan_Painting_Inspection\scene\trainData\side\origin_data\side_20251002\ID19_MT-20251022\Cam4\origin</string>
+           </property>
+          </widget>
+         </item>
          <item row="0" column="1">
           <widget class="QLineEdit" name="lineEdit_jsonFile">
            <property name="text">
-            <string>E:\code\project\Wuhan_Painting_Inspection\Painting_Defect_Detect\main_program\build\Desktop_Qt_5_15_2_MSVC2019_64bit-Release\job_file\123\cam2_ToolPara.json</string>
+            <string>E:\code\project\Wuhan_Painting_Inspection\Painting_Defect_Detect\main_program\build\Desktop_Qt_5_15_2_MSVC2019_64bit-Release\job_file\234\cam3_DetPara.json</string>
            </property>
           </widget>
          </item>
@@ -587,6 +953,8 @@ color: rgb(0, 120, 220);</string>
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="Image.qrc"/>
+ </resources>
  <connections/>
 </ui>
