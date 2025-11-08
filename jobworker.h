@@ -22,6 +22,10 @@
 #include <rvs2d/dl/ad/anomaly_det_multigpu.hpp>
 #include <rvs2d/trt/build_model.h>
 
+
+#pragma execution_character_set("utf-8")
+
+
 class Jobworker
 {
 
@@ -42,6 +46,8 @@ public:
     void initDefectDet(std::string supervisedModelPath, std::string unsupervisedModelPath);
 
     bool readTClassName();
+
+    bool readJsonstd(std::string strFile);
 
     bool result();
 

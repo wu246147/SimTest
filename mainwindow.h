@@ -58,11 +58,15 @@ public:
     void Append(const QString &text);
 
 
-    void showResult();
+    void showResult(bool isShowBox);
 
     void resetStatisticsData();
 
     void updataStatisticsData();
+
+    void resetCamResult();
+
+    void updataCamResult();
 
     /***
      * 公有参数
@@ -191,6 +195,8 @@ private slots:
     void on_pushButton_runLast_clicked();
 
     void on_comboBox_currentIndexChanged(int index);
+
+    void on_checkBox_showBox_clicked(bool checked);
 
 private:
     Ui::MainWindow *ui;

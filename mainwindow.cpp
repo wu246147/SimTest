@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->groupBox_rubbish->setVisible(false);
     //统计界面初始化
     resetStatisticsData();
+    resetCamResult();
 
 }
 
@@ -153,7 +154,7 @@ void MainWindow::clean_log_even()
 
 
 
-void MainWindow::showResult()
+void MainWindow::showResult(bool isShowBox)
 {
     try
     {
@@ -180,83 +181,113 @@ void MainWindow::showResult()
         std::vector<float> defect_scores;
         std::vector<int> defect_areas;
 
-        //判断是否卡尺定位成功
-        bool is_save_defect_img = false;
-        std::string save_data_path = "";
-
-        jobmanager.jobworkers[cam_id].getCurrentDefectInfo(save_data_path, save_data_path, is_save_defect_img, defect_scores,
-                defect_img_paths, defect_types, defect_locations, defect_areas);
-
-        LOGE("defect_locations size:%d", defect_locations.size());
-
-        for(int id = 0; id < defect_locations.size(); ++id)
+        if(isShowBox)
         {
-            QStringList defect_location_list = QString(defect_locations[id].data()).split(",");
-            cv::Rect defect_rect(defect_location_list[0].toInt(), defect_location_list[1].toInt(),
-                                 defect_location_list[2].toInt(), defect_location_list[3].toInt());
+            //判断是否卡尺定位成功
+            bool is_save_defect_img = false;
+            std::string save_data_path = "";
 
-            int line_wide = 5;
-            QGraphicsRectItem *result_item = new QGraphicsRectItem(defect_rect.x / showImgScaleSize, defect_rect.y / showImgScaleSize,
-                (defect_rect.width) / showImgScaleSize, (defect_rect.height)  / showImgScaleSize);
+            jobmanager.jobworkers[cam_id].getCurrentDefectInfo(save_data_path, save_data_path, is_save_defect_img, defect_scores,
+                    defect_img_paths, defect_types, defect_locations, defect_areas);
 
-            QPen pn(Qt::SolidLine);
-            pn.setColor(Qt::red);
-            pn.setWidth(line_wide);
-            result_item->setPen(pn);
-            item_list.push_back(result_item);
+            LOGE("defect_locations size:%d", defect_locations.size());
 
-            MyTextItem *item_text = new MyTextItem((defect_types[id] + " " + std::to_string(defect_areas[id])).data());
+            for(int id = 0; id < defect_locations.size(); ++id)
+            {
+                QStringList defect_location_list = QString(defect_locations[id].data()).split(",");
+                cv::Rect defect_rect(defect_location_list[0].toInt(), defect_location_list[1].toInt(),
+                                     defect_location_list[2].toInt(), defect_location_list[3].toInt());
+
+                int line_wide = 5;
+                QGraphicsRectItem *result_item = new QGraphicsRectItem(defect_rect.x / showImgScaleSize, defect_rect.y / showImgScaleSize,
+                    (defect_rect.width) / showImgScaleSize, (defect_rect.height)  / showImgScaleSize);
+
+                QPen pn(Qt::SolidLine);
+                pn.setColor(Qt::red);
+                pn.setWidth(line_wide);
+                result_item->setPen(pn);
+                item_list.push_back(result_item);
+
+                MyTextItem *item_text = new MyTextItem((defect_types[id] + " " + std::to_string(defect_areas[id])).data());
 
 
-            float scale = std::min((float)display->myGraphicsView->height() / (jobmanager.jobworkers[cam_id].img.rows / showImgScaleSize),
-                                   (float)display->myGraphicsView->width() / (jobmanager.jobworkers[cam_id].img.cols / showImgScaleSize));
+                float scale = std::min((float)display->myGraphicsView->height() / (jobmanager.jobworkers[cam_id].img.rows / showImgScaleSize),
+                                       (float)display->myGraphicsView->width() / (jobmanager.jobworkers[cam_id].img.cols / showImgScaleSize));
 
 
-            item_text->setCustomPos((display->myGraphicsView->width() - (jobmanager.jobworkers[cam_id].img.cols / showImgScaleSize)* scale) / 2
-                                    + (defect_rect.x + defect_rect.width) / showImgScaleSize * scale,
-                                    (display->myGraphicsView->height() - (jobmanager.jobworkers[cam_id].img.rows / showImgScaleSize)* scale) / 2
-                                    + (defect_rect.y + defect_rect.height) / showImgScaleSize * scale);
+                item_text->setCustomPos((display->myGraphicsView->width() - (jobmanager.jobworkers[cam_id].img.cols / showImgScaleSize)* scale) / 2
+                                        + (defect_rect.x + defect_rect.width) / showImgScaleSize * scale,
+                                        (display->myGraphicsView->height() - (jobmanager.jobworkers[cam_id].img.rows / showImgScaleSize)* scale) / 2
+                                        + (defect_rect.y + defect_rect.height) / showImgScaleSize * scale);
 
 
-            item_text->setDefaultTextColor(Qt::red);
-            QFont font;
-            font.setPointSize(50);
-            item_text->setFont(font);
+                item_text->setDefaultTextColor(Qt::red);
+                QFont font;
+                font.setPointSize(50);
+                item_text->setFont(font);
 
-            item_list.push_back(item_text);
+                item_list.push_back(item_text);
+            }
+            LOGE("finish defect show");
+
+            std::vector<std::vector<cv::Point2f >> labelList = jobmanager.jobworkers[cam_id].labelList;
+
+            for(int id = 0; id < labelList.size(); ++id)
+            {
+                QGraphicsPolygonItem *tmp_polygon = new QGraphicsPolygonItem(QPolygon(3));
+
+                QVector<QPoint> transformPointerList;
+
+                for(int id2 = 0; id2 < labelList[id].size() ; ++id2)
+                {
+                    transformPointerList.push_back(QPoint(labelList[id][id2].x, labelList[id][id2].y));
+                }
+                tmp_polygon = new QGraphicsPolygonItem(QPolygon(transformPointerList));
+
+
+                int line_wide = 5;
+                QPen pn(Qt::SolidLine);
+                pn.setColor(Qt::green);
+                pn.setWidth(line_wide);
+                tmp_polygon->setPen(pn);
+                item_list.push_back(tmp_polygon);
+
+            }
+
+
+            // if(!jobmanager.jobworkers[cam_id].result())
+            // {
+            //     QGraphicsTextItem *result_string  = new QGraphicsTextItem("NG");
+            //     result_string->setDefaultTextColor(Qt::red);
+            //     QFont font;
+            //     font.setPointSize(qMin(jobmanager.jobworkers[cam_id].img.cols, jobmanager.jobworkers[cam_id].img.rows) / 20 / showImgScaleSize);
+            //     result_string->setFont(font);
+            //     result_string->setTextWidth(-1);
+            //     result_string->setPos(int(display->myGraphicsView->width() * 8 / 10),
+            //                           int(display->myGraphicsView->height() * 8.5 / 10));
+            //     item_list.push_back(result_string);
+            // }
+            // else
+            // {
+            //     QGraphicsTextItem *result_string  = new QGraphicsTextItem("OK");
+            //     result_string->setDefaultTextColor(Qt::green);
+            //     QFont font;
+            //     font.setPointSize(qMin(jobmanager.jobworkers[cam_id].img.cols, jobmanager.jobworkers[cam_id].img.rows) / 20 / showImgScaleSize);
+            //     result_string->setFont(font);
+            //     result_string->setTextWidth(-1);
+            //     result_string->setPos(int(display->myGraphicsView->width() * 8 / 10),
+            //                           int(display->myGraphicsView->height() * 8.5 / 10));
+            //     item_list.push_back(result_string);
+            // }
+
+
+            for(int i = 0; i < item_list.size(); i++)
+            {
+                display->myGraphicsView->addItem(item_list[i], false);
+            }
+            LOGE("finish result show");
+
         }
-        LOGE("finish defect show");
-
-
-        if(!jobmanager.jobworkers[cam_id].result())
-        {
-            QGraphicsTextItem *result_string  = new QGraphicsTextItem("NG");
-            result_string->setDefaultTextColor(Qt::red);
-            QFont font;
-            font.setPointSize(qMin(jobmanager.jobworkers[cam_id].img.cols, jobmanager.jobworkers[cam_id].img.rows) / 20 / showImgScaleSize);
-            result_string->setFont(font);
-            result_string->setTextWidth(-1);
-            result_string->setPos(int(display->myGraphicsView->width() * 8 / 10),
-                                  int(display->myGraphicsView->height() * 8.5 / 10));
-            item_list.push_back(result_string);
-        }
-        else
-        {
-            QGraphicsTextItem *result_string  = new QGraphicsTextItem("OK");
-            result_string->setDefaultTextColor(Qt::green);
-            QFont font;
-            font.setPointSize(qMin(jobmanager.jobworkers[cam_id].img.cols, jobmanager.jobworkers[cam_id].img.rows) / 20 / showImgScaleSize);
-            result_string->setFont(font);
-            result_string->setTextWidth(-1);
-            result_string->setPos(int(display->myGraphicsView->width() * 8 / 10),
-                                  int(display->myGraphicsView->height() * 8.5 / 10));
-            item_list.push_back(result_string);
-        }
-        for(int i = 0; i < item_list.size(); i++)
-        {
-            display->myGraphicsView->addItem(item_list[i], false);
-        }
-        LOGE("finish result show");
 
     }
     catch(cv::Exception &e)
@@ -316,6 +347,35 @@ void MainWindow::updataStatisticsData()
 
 }
 
+void MainWindow::resetCamResult()
+{
+    //列表清空
+    ui->tableWidget_result->clear();
+    QVector<QString> vec{"相机id", "标注结果", "预测结果"};
+    QStringList headerLabels = vec.toList();
+    ui->tableWidget_result->setHorizontalHeaderLabels(headerLabels);
+    //添加行
+    for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+    {
+        ui->tableWidget_result->insertRow(0);
+    }
+
+    updataCamResult();
+}
+
+void MainWindow::updataCamResult()
+{
+    //设置值
+    for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+    {
+
+        ui->tableWidget_result->setItem(id, 0, new QTableWidgetItem(("Cam" + std::to_string(id + 1)).data())); //设置单元格内容
+        ui->tableWidget_result->setItem(id, 1, new QTableWidgetItem(jobmanager.jobworkers[id].labelResult ? "OK" : "NG")); //设置单元格内容
+        ui->tableWidget_result->setItem(id, 2, new QTableWidgetItem(jobmanager.jobworkers[id].result() ? "OK" : "NG")); //设置单元格内容
+
+    }
+}
+
 
 void MainWindow::updata_control_value()
 {
@@ -344,18 +404,30 @@ void MainWindow::updata_control_value()
 
 void MainWindow::runOver()
 {
-    showResult();
+    bool isShowBox = ui->checkBox_showBox->isChecked();
+    showResult(isShowBox);
 
     //总结果显示
     if(jobmanager.result())
     {
-        ui->label_result->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 56pt \"Microsoft YaHei UI\";}");
+        ui->label_result->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 24pt \"Microsoft YaHei UI\";}");
         ui->label_result->setText("OK");
     }
     else
     {
-        ui->label_result->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 56pt \"Microsoft YaHei UI\";}");
+        ui->label_result->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 24pt \"Microsoft YaHei UI\";}");
         ui->label_result->setText("NG");
+    }
+
+    if(jobmanager.labelResult())
+    {
+        ui->label_label->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 24pt \"Microsoft YaHei UI\";}");
+        ui->label_label->setText("OK");
+    }
+    else
+    {
+        ui->label_label->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 24pt \"Microsoft YaHei UI\";}");
+        ui->label_label->setText("NG");
     }
     //结果统计
     for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
@@ -367,6 +439,7 @@ void MainWindow::runOver()
 
     //统计界面更新
     updataStatisticsData();
+    updataCamResult();
 }
 
 
@@ -493,6 +566,8 @@ void MainWindow::on_pushButton_runNext_clicked()
     for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
     {
         std::string cam_image_dir  = src_image_dir + "/Cam" + std::to_string(id + 1) + "/origin";
+        std::string label_dir  = src_image_dir + "/Cam" + std::to_string(id + 1) + "_labelme";
+
         //测试
         std::vector<std::string> src_image_paths;
 
@@ -514,6 +589,17 @@ void MainWindow::on_pushButton_runNext_clicked()
         // LOGE("444");
         src_image = cv::imread(src_image_path, -1);
         jobmanager.jobworkers[id].img = src_image;
+
+        //读取labelme文件
+        QFileInfo fileinfo(src_image_path.data());
+        std::string labelme_name = fileinfo.fileName().toStdString();
+
+        replaceAll(labelme_name, ".jpg", ".json");
+        std::string labelme_path = label_dir + "/" + labelme_name;
+        // LOGE("labelme_path:%s", labelme_path.data());
+        jobmanager.jobworkers[id].readJsonstd(labelme_path);
+
+
 
     }
 
@@ -751,8 +837,12 @@ void MainWindow::on_checkBox_isDefectDet_clicked(bool checked)
 void MainWindow::on_pushButton_run_clicked()
 {
     //清空界面
-    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 36pt \"Microsoft YaHei UI\";}");
+    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
     ui->label_result->setText("等待中");
+
+    ui->label_label->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
+    ui->label_label->setText("等待中");
+
 
     on_pushButton_showROI_clicked();
 
@@ -798,10 +888,13 @@ void MainWindow::on_pushButton_reset_clicked()
     //界面刷新
     ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
 
-    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 56pt \"Microsoft YaHei UI\";}");
+    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 24pt \"Microsoft YaHei UI\";}");
     ui->label_result->setText("--");
+    ui->label_label->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 24pt \"Microsoft YaHei UI\";}");
+    ui->label_label->setText("--");
 
     resetStatisticsData();
+    resetCamResult();
 
 }
 
@@ -816,6 +909,8 @@ void MainWindow::on_pushButton_runLast_clicked()
     for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
     {
         std::string cam_image_dir  = src_image_dir + "/Cam" + std::to_string(id + 1) + "/origin";
+        std::string label_dir  = src_image_dir + "/Cam" + std::to_string(id + 1) + "_labelme";
+
         //测试
         std::vector<std::string> src_image_paths;
 
@@ -838,6 +933,14 @@ void MainWindow::on_pushButton_runLast_clicked()
         src_image = cv::imread(src_image_path, -1);
         jobmanager.jobworkers[id].img = src_image;
 
+        //读取labelme文件
+        QFileInfo fileinfo(src_image_path.data());
+        std::string labelme_name = fileinfo.fileName().toStdString();
+
+        replaceAll(labelme_name, ".jpg", ".json");
+        std::string labelme_path = label_dir + "/" + labelme_name;
+        // LOGE("labelme_path:%s", labelme_path.data());
+        jobmanager.jobworkers[id].readJsonstd(labelme_path);
     }
 
     ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
@@ -856,6 +959,14 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     //图片及结果显示
     on_pushButton_showROI_clicked();
     //结果显示
-    showResult();
+    bool isShowBox = ui->checkBox_showBox->isChecked();
+    showResult(isShowBox);
+}
+
+
+void MainWindow::on_checkBox_showBox_clicked(bool checked)
+{
+    showResult(checked);
+
 }
 

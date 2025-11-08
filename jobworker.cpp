@@ -329,18 +329,18 @@ void Jobworker::runAbnormalDefectDet(bool isShow)
             ROIImgMask = cv::Mat::ones(ROIImg.size(), CV_8UC1) * 255;
         }
 
-        for(int id = 0; id < polygonMasks.size(); ++id)
-        {
-            for(int id2 = 0; id2 < polygonMasks[id].size(); ++id2)
-            {
-                LOGE("polygonMasks[%d][%d]:(%f,%f)", id, id2, polygonMasks[id][id2].x, polygonMasks[id][id2].y);
-            }
-        }
+        // for(int id = 0; id < polygonMasks.size(); ++id)
+        // {
+        //     for(int id2 = 0; id2 < polygonMasks[id].size(); ++id2)
+        //     {
+        //         LOGE("polygonMasks[%d][%d]:(%f,%f)", id, id2, polygonMasks[id][id2].x, polygonMasks[id][id2].y);
+        //     }
+        // }
 
-        for(int id2 = 0; id2 < modelROIPoints.size(); ++id2)
-        {
-            LOGE("modelROIPoints[%d]:(%f,%f)",  id2, modelROIPoints[id2].x, modelROIPoints[id2].y);
-        }
+        // for(int id2 = 0; id2 < modelROIPoints.size(); ++id2)
+        // {
+        //     LOGE("modelROIPoints[%d]:(%f,%f)",  id2, modelROIPoints[id2].x, modelROIPoints[id2].y);
+        // }
 
         //这里因为卡尺定位可能造成xy方向发生变化，这里需要对坐标系方向进行矫正
         //主要是针对检测框和屏蔽框
@@ -357,18 +357,18 @@ void Jobworker::runAbnormalDefectDet(bool isShow)
 
         getModelROIPointTransform(H33, modelROIAngle, modelROIPoints, modelROIPointsTransform);
 
-        for(int id = 0; id < polygonMaskTransforms.size(); ++id)
-        {
-            for(int id2 = 0; id2 < polygonMaskTransforms[id].size(); ++id2)
-            {
-                LOGE("polygonMaskTransforms[%d][%d]:(%f,%f)", id, id2, polygonMaskTransforms[id][id2].x, polygonMaskTransforms[id][id2].y);
-            }
-        }
+        // for(int id = 0; id < polygonMaskTransforms.size(); ++id)
+        // {
+        //     for(int id2 = 0; id2 < polygonMaskTransforms[id].size(); ++id2)
+        //     {
+        //         LOGE("polygonMaskTransforms[%d][%d]:(%f,%f)", id, id2, polygonMaskTransforms[id][id2].x, polygonMaskTransforms[id][id2].y);
+        //     }
+        // }
 
-        for(int id2 = 0; id2 < modelROIPointsTransform.size(); ++id2)
-        {
-            LOGE("modelROIPointsTransform[%d]:(%f,%f)",  id2, modelROIPointsTransform[id2].x, modelROIPointsTransform[id2].y);
-        }
+        // for(int id2 = 0; id2 < modelROIPointsTransform.size(); ++id2)
+        // {
+        //     LOGE("modelROIPointsTransform[%d]:(%f,%f)",  id2, modelROIPointsTransform[id2].x, modelROIPointsTransform[id2].y);
+        // }
 
 
 
@@ -386,10 +386,10 @@ void Jobworker::runAbnormalDefectDet(bool isShow)
         {
 
             cv::fillPoly(ROIImgMask, polygonMaskTransforms2[id], cv::Scalar(0));
-            for(int id2 = 0; id2 < polygonMaskTransforms2[id].size(); ++id2)
-            {
-                LOGE("polygonMaskTransforms2[%d][%d]:(%d,%d)", id, id2, polygonMaskTransforms2[id][id2].x, polygonMaskTransforms2[id][id2].y);
-            }
+            // for(int id2 = 0; id2 < polygonMaskTransforms2[id].size(); ++id2)
+            // {
+            //     LOGE("polygonMaskTransforms2[%d][%d]:(%d,%d)", id, id2, polygonMaskTransforms2[id][id2].x, polygonMaskTransforms2[id][id2].y);
+            // }
         }
 
 
@@ -1101,6 +1101,68 @@ bool Jobworker::readTClassName()
         TclassNames[key.toInt()] = mJsonObject.value(key).toString().toStdString();
     }
     return true;
+}
+
+bool Jobworker::readJsonstd(std::string strFile)
+{
+    labelList.clear();
+    labelResult = true;
+
+    QFile file(strFile.data());
+    if(!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    {
+        LOGE("could't open json file");
+
+        return false;
+    }
+
+    QString value = file.readAll();
+    file.close();
+    QJsonParseError parseJsonErr;
+    QJsonDocument document = QJsonDocument::fromJson(value.toUtf8(), &parseJsonErr);
+    if(!(parseJsonErr.error == QJsonParseError::NoError))
+    {
+        LOGE("error:%s", parseJsonErr.errorString().toStdString().data());
+
+        return false;
+    }
+    QJsonObject mJsonObject = document.object();
+
+    QJsonArray shapesList = mJsonObject["shapes"].toArray();
+
+    // LOGE("shapesList count:%d", shapesList.count());
+
+    for(int id = 0; id < shapesList.count(); ++id)
+    {
+        QJsonObject shape = shapesList[id].toObject();
+
+        // LOGE("shape label:%s", shape["label"].toString().toStdString().data());
+        // if(shape["label"].toString().toStdString().compare("网格") != 0)
+        // {
+        //     LOGE("不是网格");
+        // }
+
+        if(shape["label"].toString().toStdString().compare("网格") != 0 &&
+                shape["label"].toString().toStdString().compare("边缘") != 0 &&
+                shape["label"].toString().toStdString().compare("方块") != 0)
+        {
+            QJsonArray pointsList = shape["points"].toArray();
+            std::vector<cv::Point2f > label;
+
+            for(int id2 = 0; id2 < pointsList.count(); ++id2)
+            {
+                QJsonArray point = pointsList[id2].toArray();
+
+                label.push_back(cv::Point2f(point[0].toDouble(), point[1].toDouble()));
+            }
+
+            labelList.push_back(label);
+            labelResult = false;
+        }
+
+    }
+
+
 }
 
 
