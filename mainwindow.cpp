@@ -45,6 +45,9 @@ MainWindow::MainWindow(QWidget *parent)
             this, &MainWindow::runOver);
 
     ui->groupBox_rubbish->setVisible(false);
+    //统计界面初始化
+    resetStatisticsData();
+
 }
 
 MainWindow::~MainWindow()
@@ -150,7 +153,7 @@ void MainWindow::clean_log_even()
 
 
 
-void MainWindow::show_result()
+void MainWindow::showResult()
 {
     try
     {
@@ -277,6 +280,42 @@ void MainWindow::show_result()
     }
 }
 
+void MainWindow::resetStatisticsData()
+{
+    //列表清空
+    ui->tableWidget_statistics->clear();
+    QVector<QString> vec{"相机id", "漏检率", "误检率", "检测总数"};
+    QStringList headerLabels = vec.toList();
+    ui->tableWidget_statistics->setHorizontalHeaderLabels(headerLabels);
+    //添加行
+    for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+    {
+        ui->tableWidget_statistics->insertRow(0);
+    }
+    ui->tableWidget_statistics->insertRow(0);
+
+    updataStatisticsData();
+}
+
+void MainWindow::updataStatisticsData()
+{
+    //设置值
+    for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+    {
+
+        ui->tableWidget_statistics->setItem(id, 0, new QTableWidgetItem(("Cam" + std::to_string(id + 1)).data())); //设置单元格内容
+        ui->tableWidget_statistics->setItem(id, 1, new QTableWidgetItem((to_string_with_precision(jobmanager.jobworkers[id].MissRate() * 100, 3) + "%").data())); //设置单元格内容
+        ui->tableWidget_statistics->setItem(id, 2, new QTableWidgetItem((to_string_with_precision(jobmanager.jobworkers[id].FPR() * 100, 3) + "%").data())); //设置单元格内容
+        ui->tableWidget_statistics->setItem(id, 3, new QTableWidgetItem(std::to_string(jobmanager.jobworkers[id].Total()).data())); //设置单元格内容
+    }
+
+    ui->tableWidget_statistics->setItem(jobmanager.jobworkers.size(), 0, new QTableWidgetItem("总结果")); //设置单元格内容
+    ui->tableWidget_statistics->setItem(jobmanager.jobworkers.size(), 1, new QTableWidgetItem((to_string_with_precision(jobmanager.MissRate() * 100, 3) + "%").data())); //设置单元格内容
+    ui->tableWidget_statistics->setItem(jobmanager.jobworkers.size(), 2, new QTableWidgetItem((to_string_with_precision(jobmanager.FPR() * 100, 3) + "%").data())); //设置单元格内容
+    ui->tableWidget_statistics->setItem(jobmanager.jobworkers.size(), 3, new QTableWidgetItem(std::to_string(jobmanager.Total()).data())); //设置单元格内容
+
+}
+
 
 void MainWindow::updata_control_value()
 {
@@ -305,7 +344,29 @@ void MainWindow::updata_control_value()
 
 void MainWindow::runOver()
 {
-    show_result();
+    showResult();
+
+    //总结果显示
+    if(jobmanager.result())
+    {
+        ui->label_result->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 56pt \"Microsoft YaHei UI\";}");
+        ui->label_result->setText("OK");
+    }
+    else
+    {
+        ui->label_result->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 56pt \"Microsoft YaHei UI\";}");
+        ui->label_result->setText("NG");
+    }
+    //结果统计
+    for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+    {
+        jobmanager.jobworkers[id].statistics();
+
+    }
+    jobmanager.statistics();
+
+    //统计界面更新
+    updataStatisticsData();
 }
 
 
@@ -689,6 +750,10 @@ void MainWindow::on_checkBox_isDefectDet_clicked(bool checked)
 
 void MainWindow::on_pushButton_run_clicked()
 {
+    //清空界面
+    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 36pt \"Microsoft YaHei UI\";}");
+    ui->label_result->setText("等待中");
+
     on_pushButton_showROI_clicked();
 
     QFuture<void> f = QtConcurrent::run([ = ]()
@@ -726,9 +791,17 @@ void MainWindow::on_pushButton_reset_clicked()
     for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
     {
         tmpSrcImgIdList[id] = -1;
+        jobmanager.jobworkers[id].resetStatistics();
     }
+    jobmanager.resetStatistics();
+
     //界面刷新
     ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+
+    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 56pt \"Microsoft YaHei UI\";}");
+    ui->label_result->setText("--");
+
+    resetStatisticsData();
 
 }
 
@@ -783,6 +856,6 @@ void MainWindow::on_comboBox_currentIndexChanged(int index)
     //图片及结果显示
     on_pushButton_showROI_clicked();
     //结果显示
-    show_result();
+    showResult();
 }
 

@@ -540,6 +540,72 @@ void Jobworker::runAbnormalDefectDet(bool isShow)
 
 }
 
+float Jobworker::MissRate()
+{
+    if(tp + fn + tn + fp == 0)
+    {
+        return 0;
+    }
+    //正常漏检应该是fn / (tp + fn)
+    return (float)fn / (tp + fn + tn + fp);
+}
+
+float Jobworker::FPR()
+{
+    if(tp + fn + tn + fp == 0)
+    {
+        return 0;
+    }
+    // LOGE("fp:%d", fp);
+
+    //正常误检应该是fn / (tn + fp)
+    return (float)fp / (tp + fn + tn + fp);
+}
+
+int Jobworker::Total()
+{
+    return tp + fn + tn + fp;
+}
+
+void Jobworker::statistics()
+{
+    if(labelResult)
+    {
+        if(result())
+        {
+            tn += 1;
+        }
+        else
+        {
+            fp += 1;
+        }
+    }
+    else
+    {
+        if(result())
+        {
+            fn += 1;
+        }
+        else
+        {
+            tp += 1;
+        }
+    }
+    // LOGE("tn:%d", tn);
+    // LOGE("tp:%d", tp);
+    // LOGE("fn:%d", fn);
+    // LOGE("fp:%d", fp);
+
+}
+
+void Jobworker::resetStatistics()
+{
+    tp = 0;
+    tn = 0;
+    fp = 0;
+    fn = 0;
+}
+
 bool Jobworker::result()
 {
     bool rt = true;

@@ -58,7 +58,11 @@ public:
     void Append(const QString &text);
 
 
-    void show_result();
+    void showResult();
+
+    void resetStatisticsData();
+
+    void updataStatisticsData();
 
     /***
      * 公有参数

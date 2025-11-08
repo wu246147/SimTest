@@ -62,6 +62,15 @@ public:
     ///
     void runAbnormalDefectDet(bool isShow = false);
 
+    float MissRate();
+
+    float FPR();
+
+    int Total();
+
+    void statistics();
+
+    void resetStatistics();
 
     /***
      * 公有参数
@@ -177,6 +186,17 @@ public:
     //目标检测模型类型
     int modelType = 5;
     std::string modelSize = "m";
+
+    //统计结果
+    int tp = 0;
+    int tn = 0;
+    int fp = 0;
+    int fn = 0;
+
+    //实际结果
+    std::vector<std::vector<cv::Point2f >> labelList;
+    bool labelResult = true;
+
 
 
 };

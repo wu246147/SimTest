@@ -2,7 +2,15 @@
 #include "mylog.h"
 
 
-
+template <typename T>
+std::string to_string_with_precision(const T a_value, const int n)
+{
+    int nn = n ;
+    std::ostringstream out;
+    out.setf(std::ios::fixed);
+    out << std::setprecision(nn) << a_value;
+    return out.str();
+}
 ///
 /// \brief MatToQImage Mat 转 QImage
 /// \param cvImage
