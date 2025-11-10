@@ -394,7 +394,7 @@ void Jobworker::runAbnormalDefectDet(bool isShow)
 
 
         // 屏蔽边缘位置
-        drawSideRect(side_filter_size, ROIImgMask.size().width, ROIImgMask.size().height, ROIImgMask);
+        drawSideRect(side_filter_size, side_filter_size2, ROIImgMask.size().width, ROIImgMask.size().height, ROIImgMask);
 
         if(isShow)
         {
@@ -571,7 +571,8 @@ void Jobworker::statistics()
 {
     if(labelResult)
     {
-        if(result())
+        //用的话，才考虑进去
+        if(result() || !isUsed())
         {
             tn += 1;
         }
@@ -582,7 +583,8 @@ void Jobworker::statistics()
     }
     else
     {
-        if(result())
+        //用的话，才考虑进去
+        if(result() && isUsed())
         {
             fn += 1;
         }
@@ -604,6 +606,20 @@ void Jobworker::resetStatistics()
     tn = 0;
     fp = 0;
     fn = 0;
+}
+
+bool Jobworker::isUsed()
+{
+    bool isused = false;
+    if(isUseDefectDet)
+    {
+        isused = true;
+    }
+    if(isUseAnomalDet)
+    {
+        isused = true;
+    }
+    return isused;
 }
 
 bool Jobworker::result()
@@ -941,6 +957,7 @@ void Jobworker::saveDetToolPara(std::string savePath)
     abnormalDetParaObject.insert("abnormalThre", abnormalThre);
     abnormalDetParaObject.insert("filter_defect_area_abnormal", filter_defect_area_abnormal);
     abnormalDetParaObject.insert("side_filter_size", side_filter_size);
+    abnormalDetParaObject.insert("side_filter_size2", side_filter_size2);
 
 
     //
@@ -1067,6 +1084,10 @@ void Jobworker::loadDetToolPara(std::string strFile)
     abnormalThre = abnormalDetParaObject["abnormalThre"].toDouble();
     filter_defect_area_abnormal = abnormalDetParaObject["filter_defect_area_abnormal"].toInt();
     side_filter_size = abnormalDetParaObject["side_filter_size"].toInt();
+
+    //后面现场改了后，再启用
+    side_filter_size2 = abnormalDetParaObject["side_filter_size"].toInt();
+    // side_filter_size2 = abnormalDetParaObject["side_filter_size2"].toInt();
 
 
 }

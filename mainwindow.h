@@ -28,6 +28,19 @@
 
 #include "jobmanager.h"
 
+
+static inline void runInMainThread(std::function<void()> fn)
+{
+    if(QThread::currentThread() == qApp->thread())    // 已经在主线程
+    {
+        fn();
+    }
+    else
+    {
+        QMetaObject::invokeMethod(qApp, fn, Qt::QueuedConnection);
+    }
+}
+
 QT_BEGIN_NAMESPACE
 namespace Ui
 {
@@ -101,7 +114,11 @@ public:
     QPoint window_pos;
     QPoint mouse_pos;
 
-    bool is_loading = false;
+    bool isLoading = false;
+
+    bool isBusy = false;
+
+    bool isRunning = false;
 
     //显示图片缩小系数
     int showImgScaleSize = 1;
@@ -138,7 +155,7 @@ private slots:
 
     void on_pushButton_runNext_clicked();
 
-    void on_pushButton_runAll_clicked();
+    void on_pushButton_runAll_clicked(bool isclicked);
 
     /***
      * 私有参数

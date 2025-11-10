@@ -45,9 +45,17 @@ bool Jobmanager::result()
 {
     for(int id = 0; id < jobworkers.size(); ++id)
     {
-        if(!jobworkers[id].result())
+        //用的话，才考虑进去
+        if(jobworkers[id].isUsed())
         {
-            return false;
+            if(!jobworkers[id].result())
+            {
+                return false;
+            }
+        }
+        else
+        {
+            continue;
         }
     }
     return true;
@@ -57,10 +65,20 @@ bool Jobmanager::labelResult()
 {
     for(int id = 0; id < jobworkers.size(); ++id)
     {
-        if(!jobworkers[id].labelResult)
+        //用的话，才考虑进去
+        if(jobworkers[id].isUsed())
         {
-            return false;
+            if(!jobworkers[id].labelResult)
+            {
+                return false;
+            }
         }
+        else
+        {
+            continue;
+        }
+
+
     }
     return true;
 }

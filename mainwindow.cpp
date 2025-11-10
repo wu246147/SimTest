@@ -158,21 +158,24 @@ void MainWindow::showResult(bool isShowBox)
 {
     try
     {
-        QGraphicsPolygonItem *tmp_polygon = new QGraphicsPolygonItem(QPolygon(3));
-        QGraphicsRectItem *tmp_rect = new QGraphicsRectItem(0, 0, 100, 100);
-        QGraphicsTextItem *tmp_string = new QGraphicsTextItem("str");
-        MyGraphicRectItem *tmp_my_rect = new MyGraphicRectItem(QRectF(0, 0, 100, 100));
-        QGraphicsEllipseItem *tmp_ellip = new QGraphicsEllipseItem();
-        display->myGraphicsView->cleanItem(tmp_polygon);
-        display->myGraphicsView->cleanItem(tmp_rect);
-        display->myGraphicsView->cleanItem(tmp_string);
-        display->myGraphicsView->cleanItem(tmp_my_rect);
-        display->myGraphicsView->cleanItem(tmp_ellip);
-        delete tmp_rect;
-        delete tmp_string;
-        delete tmp_polygon;
-        delete tmp_my_rect;
-        delete tmp_ellip;
+        runInMainThread([ = ]
+        {
+            QGraphicsPolygonItem *tmp_polygon = new QGraphicsPolygonItem(QPolygon(3));
+            QGraphicsRectItem *tmp_rect = new QGraphicsRectItem(0, 0, 100, 100);
+            QGraphicsTextItem *tmp_string = new QGraphicsTextItem("str");
+            MyGraphicRectItem *tmp_my_rect = new MyGraphicRectItem(QRectF(0, 0, 100, 100));
+            QGraphicsEllipseItem *tmp_ellip = new QGraphicsEllipseItem();
+            display->myGraphicsView->cleanItem(tmp_polygon);
+            display->myGraphicsView->cleanItem(tmp_rect);
+            display->myGraphicsView->cleanItem(tmp_string);
+            display->myGraphicsView->cleanItem(tmp_my_rect);
+            display->myGraphicsView->cleanItem(tmp_ellip);
+            delete tmp_rect;
+            delete tmp_string;
+            delete tmp_polygon;
+            delete tmp_my_rect;
+            delete tmp_ellip;
+        });
         std::vector<QGraphicsItem *> item_list;
 
         std::vector<std::string> defect_img_paths;
@@ -281,10 +284,13 @@ void MainWindow::showResult(bool isShowBox)
             // }
 
 
-            for(int i = 0; i < item_list.size(); i++)
+            runInMainThread([ = ]
             {
-                display->myGraphicsView->addItem(item_list[i], false);
-            }
+                for(int i = 0; i < item_list.size(); i++)
+                {
+                    display->myGraphicsView->addItem(item_list[i], false);
+                }
+            });
             LOGE("finish result show");
 
         }
@@ -379,7 +385,7 @@ void MainWindow::updataCamResult()
 
 void MainWindow::updata_control_value()
 {
-    is_loading = true;
+    isLoading = true;
 
     //有监督参数
     ui->checkBox_isDefectDet->setChecked(jobmanager.jobworkers[cam_id].isUseDefectDet);
@@ -399,36 +405,39 @@ void MainWindow::updata_control_value()
     ui->spinBox_filter_defeat_area_abnormal->setValue(jobmanager.jobworkers[cam_id].filter_defect_area_abnormal);
     ui->spinBox_side_filter_size->setValue(jobmanager.jobworkers[cam_id].side_filter_size);
 
-    is_loading = false;
+    isLoading = false;
 }
 
 void MainWindow::runOver()
 {
+    LOGE("run over")
     bool isShowBox = ui->checkBox_showBox->isChecked();
     showResult(isShowBox);
+    runInMainThread([ = ]
+    {
+        //总结果显示
+        if(jobmanager.result())
+        {
+            ui->label_result->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 24pt \"Microsoft YaHei UI\";}");
+            ui->label_result->setText("OK");
+        }
+        else
+        {
+            ui->label_result->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 24pt \"Microsoft YaHei UI\";}");
+            ui->label_result->setText("NG");
+        }
 
-    //总结果显示
-    if(jobmanager.result())
-    {
-        ui->label_result->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 24pt \"Microsoft YaHei UI\";}");
-        ui->label_result->setText("OK");
-    }
-    else
-    {
-        ui->label_result->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 24pt \"Microsoft YaHei UI\";}");
-        ui->label_result->setText("NG");
-    }
-
-    if(jobmanager.labelResult())
-    {
-        ui->label_label->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 24pt \"Microsoft YaHei UI\";}");
-        ui->label_label->setText("OK");
-    }
-    else
-    {
-        ui->label_label->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 24pt \"Microsoft YaHei UI\";}");
-        ui->label_label->setText("NG");
-    }
+        if(jobmanager.labelResult())
+        {
+            ui->label_label->setStyleSheet("QLabel{color:rgb(0,255,0);font: 700 24pt \"Microsoft YaHei UI\";}");
+            ui->label_label->setText("OK");
+        }
+        else
+        {
+            ui->label_label->setStyleSheet("QLabel{color:rgb(255,0,0);font: 700 24pt \"Microsoft YaHei UI\";}");
+            ui->label_label->setText("NG");
+        }
+    });
     //结果统计
     for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
     {
@@ -437,9 +446,15 @@ void MainWindow::runOver()
     }
     jobmanager.statistics();
 
-    //统计界面更新
-    updataStatisticsData();
-    updataCamResult();
+    runInMainThread([ = ]
+    {
+        //统计界面更新
+        updataStatisticsData();
+        updataCamResult();
+    });
+
+    isBusy = false;
+
 }
 
 
@@ -463,11 +478,11 @@ void MainWindow::on_pushButton_readJsonFile_clicked()
     updata_control_value();
 
 
-    //使能界面
-    ui->pushButton_runAll->setEnabled(true);
-    ui->pushButton_runNext->setEnabled(true);
-    ui->pushButton_showImage->setEnabled(true);
-    ui->pushButton_showROI->setEnabled(true);
+    // //使能界面
+    // ui->pushButton_runAll->setEnabled(true);
+    // ui->pushButton_runNext->setEnabled(true);
+    // ui->pushButton_showImage->setEnabled(true);
+    // ui->pushButton_showROI->setEnabled(true);
 
 }
 
@@ -537,7 +552,11 @@ void MainWindow::on_pushButton_showROI_clicked()
 {
     // LOGE("111");
     // qDebug() << "111";
-    display->myGraphicsView->cleanItem();
+    runInMainThread([ = ]
+    {
+        display->myGraphicsView->cleanItem();
+
+    });
     // LOGE("222");
     // qDebug() << "222";
 
@@ -550,15 +569,22 @@ void MainWindow::on_pushButton_showROI_clicked()
     }
 
 
+    runInMainThread([ = ]
+    {
+        display->myGraphicsView->setImage(MatToPixmap(jobmanager.jobworkers[cam_id].img));
 
+    });
     //显示图片和卡尺位置
-    display->myGraphicsView->setImage(MatToPixmap(jobmanager.jobworkers[cam_id].img));
 
 }
 
 
 void MainWindow::on_pushButton_runNext_clicked()
 {
+    if(isBusy)
+    {
+        return;
+    }
     // LOGE("111");
     std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();
 
@@ -602,28 +628,161 @@ void MainWindow::on_pushButton_runNext_clicked()
 
 
     }
-
-    ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+    runInMainThread([ = ]
+    {
+        ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+    });
 
     on_pushButton_run_clicked();
 
 }
 
 
-void MainWindow::on_pushButton_runAll_clicked()
+void MainWindow::on_pushButton_runAll_clicked(bool isclicked)
 {
-    // std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();
-    // //测试
-    // std:: vector<std::string> src_image_paths;
-    // //            qDebug()<<222;
-    // get_files(src_image_dir, &src_image_paths);
+    if(isclicked)
+    {
+        isRunning = true;
+        //屏蔽按键
+        runInMainThread([ = ]
+        {
+            ui->pushButton_readJsonFile->setEnabled(false);
+            ui->pushButton_initModel->setEnabled(false);
+            ui->groupBox_12->setEnabled(false);
+            ui->groupBox_13->setEnabled(false);
+            ui->checkBox_isshow->setEnabled(false);
+            ui->pushButton_reset->setEnabled(false);
+            ui->pushButton_run->setEnabled(false);
+            ui->pushButton_runNext->setEnabled(false);
+            ui->pushButton_runLast->setEnabled(false);
+            ui->pushButton_savePara->setEnabled(false);
 
-    // tmpSrcImgIdList[cam_id] = -1;
+        });
+    }
+    else
+    {
+        isRunning = false;
+        //使能按键
+        runInMainThread([ = ]
+        {
+            ui->pushButton_readJsonFile->setEnabled(true);
+            ui->pushButton_initModel->setEnabled(true);
+            ui->groupBox_12->setEnabled(true);
+            ui->groupBox_13->setEnabled(true);
+            ui->checkBox_isshow->setEnabled(true);
+            ui->pushButton_reset->setEnabled(true);
+            ui->pushButton_run->setEnabled(true);
+            ui->pushButton_runNext->setEnabled(true);
+            ui->pushButton_runLast->setEnabled(true);
+            ui->pushButton_savePara->setEnabled(true);
 
-    // for(int id = 0; id < src_image_paths.size(); ++id)
-    // {
-    //     on_pushButton_runNext_clicked();
-    // }
+        });
+        return;
+    }
+    on_pushButton_reset_clicked();
+
+    std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();
+
+
+    std::string cam_image_dir  = src_image_dir + "/Cam" + std::to_string(0 + 1) + "/origin";
+
+    //测试
+    std::vector<std::string> src_image_paths;
+
+    // LOGE("222");
+    get_files(cam_image_dir, &src_image_paths);
+
+    LOGE("src_image_paths size : %d", src_image_paths.size());
+    LOGE("tmpSrcImgIdList[0] : %d", tmpSrcImgIdList[0]);
+
+    QFuture<void> f = QtConcurrent::run([ = ]()
+    {
+        while(tmpSrcImgIdList[0] < (int)(src_image_paths.size() - 1) && isRunning == true)
+        {
+            std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();
+
+            for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+            {
+                std::string cam_image_dir  = src_image_dir + "/Cam" + std::to_string(id + 1) + "/origin";
+                std::string label_dir  = src_image_dir + "/Cam" + std::to_string(id + 1) + "_labelme";
+
+                //测试
+                std::vector<std::string> src_image_paths;
+
+                // LOGE("222");
+                get_files(cam_image_dir, &src_image_paths);
+                if(src_image_paths.size() < 1)
+                {
+                    LOGE("no images.");
+                    return;
+                }
+                tmpSrcImgIdList[id] += 1;
+                // LOGE("333");
+                if(tmpSrcImgIdList[id] > src_image_paths.size() - 1)
+                {
+                    tmpSrcImgIdList[id] = 0;
+                }
+                std::string src_image_path = src_image_paths[tmpSrcImgIdList[id]];
+                cv::Mat src_image;
+                // LOGE("444");
+                src_image = cv::imread(src_image_path, -1);
+                jobmanager.jobworkers[id].img = src_image;
+
+                //读取labelme文件
+                QFileInfo fileinfo(src_image_path.data());
+                std::string labelme_name = fileinfo.fileName().toStdString();
+
+                replaceAll(labelme_name, ".jpg", ".json");
+                std::string labelme_path = label_dir + "/" + labelme_name;
+                // LOGE("labelme_path:%s", labelme_path.data());
+                jobmanager.jobworkers[id].readJsonstd(labelme_path);
+
+            }
+
+            runInMainThread([ = ]
+            {
+                ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+            });
+
+            //清空界面
+            runInMainThread([ = ]
+            {
+                ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
+                ui->label_result->setText("等待中");
+
+                ui->label_label->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
+                ui->label_label->setText("等待中");
+
+            });
+
+
+            on_pushButton_showROI_clicked();
+
+            for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+            {
+                if(jobmanager.jobworkers[id].img.empty())
+                {
+                    return;
+                }
+
+                if(cam_id == id)
+                {
+                    bool isshow = ui->checkBox_isshow->isChecked();
+                    jobmanager.jobworkers[id].run(isshow);
+
+                }
+                else
+                {
+                    jobmanager.jobworkers[id].run(false);
+
+                }
+            }
+
+            runOver();
+
+        }
+
+    });
     // QMessageBox::warning(this, "处理完成。",
     //                      "处理完成。", QMessageBox::StandardButton::Ok);
 
@@ -691,14 +850,28 @@ void MainWindow::on_pushButton_initModel_clicked()
 
     QMessageBox::warning(this, "打开完成.",
                          "模型文件打开完成。", QMessageBox::StandardButton::Ok);
+    runInMainThread([ = ]
+    {
+        ui->pushButton_readJsonFile->setEnabled(true);
+        ui->pushButton_initModel->setEnabled(true);
+        ui->groupBox_12->setEnabled(true);
+        ui->groupBox_13->setEnabled(true);
+        ui->checkBox_isshow->setEnabled(true);
+        ui->pushButton_reset->setEnabled(true);
+        ui->pushButton_run->setEnabled(true);
+        ui->pushButton_runNext->setEnabled(true);
+        ui->pushButton_runLast->setEnabled(true);
+        ui->pushButton_savePara->setEnabled(true);
+        ui->pushButton_runAll->setEnabled(true);
 
+    });
 
 }
 
 
 void MainWindow::on_spinBox_maskThre_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -710,7 +883,7 @@ void MainWindow::on_spinBox_maskThre_valueChanged(int arg1)
 
 void MainWindow::on_spinBox_cutSize_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -720,7 +893,7 @@ void MainWindow::on_spinBox_cutSize_valueChanged(int arg1)
 
 void MainWindow::on_spinBox_overlappingSize_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -730,7 +903,7 @@ void MainWindow::on_spinBox_overlappingSize_valueChanged(int arg1)
 
 void MainWindow::on_doubleSpinBox_thre_valueChanged(double arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -740,7 +913,7 @@ void MainWindow::on_doubleSpinBox_thre_valueChanged(double arg1)
 
 void MainWindow::on_spinBox_filter_defeat_area_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -750,7 +923,7 @@ void MainWindow::on_spinBox_filter_defeat_area_valueChanged(int arg1)
 
 void MainWindow::on_spinBox_AbnormalCutSize_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -760,7 +933,7 @@ void MainWindow::on_spinBox_AbnormalCutSize_valueChanged(int arg1)
 
 void MainWindow::on_spinBox_AbnormalOverlappingSize_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -770,7 +943,7 @@ void MainWindow::on_spinBox_AbnormalOverlappingSize_valueChanged(int arg1)
 
 void MainWindow::on_doubleSpinBox_AbnormalThre_valueChanged(double arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -780,7 +953,7 @@ void MainWindow::on_doubleSpinBox_AbnormalThre_valueChanged(double arg1)
 
 void MainWindow::on_spinBox_filter_defeat_area_abnormal_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -790,7 +963,7 @@ void MainWindow::on_spinBox_filter_defeat_area_abnormal_valueChanged(int arg1)
 
 void MainWindow::on_spinBox_side_filter_size_valueChanged(int arg1)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -816,7 +989,7 @@ void MainWindow::on_pushButton_savePara_clicked()
 
 void MainWindow::on_checkBox_isUseAbnormal_clicked(bool checked)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -826,7 +999,7 @@ void MainWindow::on_checkBox_isUseAbnormal_clicked(bool checked)
 
 void MainWindow::on_checkBox_isDefectDet_clicked(bool checked)
 {
-    if(is_loading)
+    if(isLoading)
     {
         return;
     }
@@ -837,14 +1010,20 @@ void MainWindow::on_checkBox_isDefectDet_clicked(bool checked)
 void MainWindow::on_pushButton_run_clicked()
 {
     //清空界面
-    ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
-    ui->label_result->setText("等待中");
+    runInMainThread([ = ]
+    {
+        ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
+        ui->label_result->setText("等待中");
 
-    ui->label_label->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
-    ui->label_label->setText("等待中");
+        ui->label_label->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 18pt \"Microsoft YaHei UI\";}");
+        ui->label_label->setText("等待中");
+
+    });
 
 
     on_pushButton_showROI_clicked();
+
+    isBusy = true;
 
     QFuture<void> f = QtConcurrent::run([ = ]()
     {
@@ -876,6 +1055,7 @@ void MainWindow::on_pushButton_run_clicked()
 
 void MainWindow::on_pushButton_reset_clicked()
 {
+    isBusy = false;
     //参数重置
     // tmpSrcImgId = -1;
     for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
@@ -902,6 +1082,10 @@ void MainWindow::on_pushButton_reset_clicked()
 void MainWindow::on_pushButton_runLast_clicked()
 {
     //
+    if(isBusy)
+    {
+        return;
+    }
 
     // LOGE("111");
     std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();

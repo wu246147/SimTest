@@ -294,6 +294,9 @@ color: #FFFFFF;</string>
          </item>
          <item row="9" column="0">
           <widget class="QPushButton" name="pushButton_reset">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton
 {
@@ -317,6 +320,9 @@ QPushButton:pressed
          </item>
          <item row="8" column="1">
           <widget class="QCheckBox" name="checkBox_isshow">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>显示检测过程</string>
            </property>
@@ -324,6 +330,9 @@ QPushButton:pressed
          </item>
          <item row="8" column="0">
           <widget class="QPushButton" name="pushButton_run">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton
 {
@@ -357,6 +366,9 @@ QPushButton:pressed
          </item>
          <item row="10" column="0">
           <widget class="QPushButton" name="pushButton_runLast">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton
 {
@@ -412,7 +424,7 @@ QPushButton:pressed
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>0</y>
+              <y>-29</y>
               <width>309</width>
               <height>536</height>
              </rect>
@@ -622,8 +634,11 @@ QPushButton:pressed
            </property>
           </widget>
          </item>
-         <item row="11" column="0">
+         <item row="12" column="0">
           <widget class="QPushButton" name="pushButton_savePara">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton
 {
@@ -735,6 +750,9 @@ QPushButton:pressed
          </item>
          <item row="10" column="1">
           <widget class="QPushButton" name="pushButton_runNext">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="styleSheet">
             <string notr="true">QPushButton
 {
@@ -763,7 +781,7 @@ QPushButton:pressed
            </property>
           </widget>
          </item>
-         <item row="12" column="0">
+         <item row="13" column="0">
           <spacer name="verticalSpacer">
            <property name="orientation">
             <enum>Qt::Vertical</enum>
@@ -803,6 +821,35 @@ QPushButton:pressed
            </property>
            <property name="text">
             <string>打开参数文件</string>
+           </property>
+          </widget>
+         </item>
+         <item row="11" column="0">
+          <widget class="QPushButton" name="pushButton_runAll">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QPushButton
+{
+    background-color: rgb(11, 60, 106);
+}
+
+QPushButton:checked 
+{
+	background-color: rgb(42, 94, 162);
+}
+
+QPushButton:pressed
+{
+	background-color: rgb(31, 84, 162);
+}</string>
+           </property>
+           <property name="text">
+            <string>遍历所有图片</string>
+           </property>
+           <property name="checkable">
+            <bool>true</bool>
            </property>
           </widget>
          </item>
@@ -1250,35 +1297,6 @@ QPushButton:pressed
           </property>
           <property name="text">
            <string>显示图片</string>
-          </property>
-         </widget>
-         <widget class="QPushButton" name="pushButton_runAll">
-          <property name="geometry">
-           <rect>
-            <x>60</x>
-            <y>170</y>
-            <width>207</width>
-            <height>32</height>
-           </rect>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QPushButton
-{
-    background-color: rgb(11, 60, 106);
-}
-
-QPushButton:checked 
-{
-	background-color: rgb(42, 94, 162);
-}
-
-QPushButton:pressed
-{
-	background-color: rgb(31, 84, 162);
-}</string>
-          </property>
-          <property name="text">
-           <string>遍历所有图片</string>
           </property>
          </widget>
         </widget>

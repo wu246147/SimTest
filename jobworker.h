@@ -78,6 +78,8 @@ public:
 
     void resetStatistics();
 
+    bool isUsed();
+
     /***
      * 公有参数
      ***/
@@ -127,6 +129,7 @@ public:
 
     int filter_defect_area_abnormal = 10;
     int side_filter_size = 1;
+    int side_filter_size2 = 1;
 
 
     // 手动mask区域
