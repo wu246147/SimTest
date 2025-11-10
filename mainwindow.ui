@@ -424,9 +424,9 @@ QPushButton:pressed
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>-29</y>
-              <width>309</width>
-              <height>536</height>
+              <y>-78</y>
+              <width>333</width>
+              <height>571</height>
              </rect>
             </property>
             <layout class="QGridLayout" name="gridLayout_4">
@@ -534,27 +534,6 @@ QPushButton:pressed
                 <string>无监督目标检测参数</string>
                </property>
                <layout class="QGridLayout" name="gridLayout_20">
-                <item row="2" column="0">
-                 <widget class="QLabel" name="label_27">
-                  <property name="text">
-                   <string>重叠图片大小</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="4" column="0">
-                 <widget class="QLabel" name="label_70">
-                  <property name="text">
-                   <string>缺陷大小限制</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="5" column="0">
-                 <widget class="QLabel" name="label_71">
-                  <property name="text">
-                   <string>边缘缺陷过滤</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="4" column="1">
                  <widget class="QSpinBox" name="spinBox_filter_defeat_area_abnormal">
                   <property name="minimum">
@@ -565,13 +544,6 @@ QPushButton:pressed
                   </property>
                  </widget>
                 </item>
-                <item row="0" column="0">
-                 <widget class="QCheckBox" name="checkBox_isUseAbnormal">
-                  <property name="text">
-                   <string>启用</string>
-                  </property>
-                 </widget>
-                </item>
                 <item row="2" column="1">
                  <widget class="QSpinBox" name="spinBox_AbnormalOverlappingSize">
                   <property name="maximum">
@@ -579,20 +551,10 @@ QPushButton:pressed
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="QLabel" name="label_28">
-                  <property name="text">
-                   <string>切割图片大小</string>
-                  </property>
-                 </widget>
-                </item>
-                <item row="3" column="1">
-                 <widget class="QDoubleSpinBox" name="doubleSpinBox_AbnormalThre">
-                  <property name="minimum">
-                   <double>0.250000000000000</double>
-                  </property>
+                <item row="1" column="1">
+                 <widget class="QSpinBox" name="spinBox_AbnormalCutSize">
                   <property name="maximum">
-                   <double>1.000000000000000</double>
+                   <number>2048</number>
                   </property>
                  </widget>
                 </item>
@@ -606,10 +568,48 @@ QPushButton:pressed
                   </property>
                  </widget>
                 </item>
-                <item row="1" column="1">
-                 <widget class="QSpinBox" name="spinBox_AbnormalCutSize">
+                <item row="5" column="0">
+                 <widget class="QLabel" name="label_71">
+                  <property name="text">
+                   <string>上下边缘缺陷过滤</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="label_28">
+                  <property name="text">
+                   <string>切割图片大小</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="label_70">
+                  <property name="text">
+                   <string>缺陷大小限制</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QCheckBox" name="checkBox_isUseAbnormal">
+                  <property name="text">
+                   <string>启用</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="label_27">
+                  <property name="text">
+                   <string>重叠图片大小</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QDoubleSpinBox" name="doubleSpinBox_AbnormalThre">
+                  <property name="minimum">
+                   <double>0.250000000000000</double>
+                  </property>
                   <property name="maximum">
-                   <number>2048</number>
+                   <double>1.000000000000000</double>
                   </property>
                  </widget>
                 </item>
@@ -617,6 +617,23 @@ QPushButton:pressed
                  <widget class="QLabel" name="label_29">
                   <property name="text">
                    <string>阈值</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="0">
+                 <widget class="QLabel" name="label_72">
+                  <property name="text">
+                   <string>左右边缘缺陷过滤</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="6" column="1">
+                 <widget class="QSpinBox" name="spinBox_side_filter_size_2">
+                  <property name="minimum">
+                   <number>1</number>
+                  </property>
+                  <property name="maximum">
+                   <number>200</number>
                   </property>
                  </widget>
                 </item>

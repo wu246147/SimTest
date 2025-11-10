@@ -404,6 +404,7 @@ void MainWindow::updata_control_value()
     ui->doubleSpinBox_AbnormalThre->setValue(jobmanager.jobworkers[cam_id].abnormalThre);
     ui->spinBox_filter_defeat_area_abnormal->setValue(jobmanager.jobworkers[cam_id].filter_defect_area_abnormal);
     ui->spinBox_side_filter_size->setValue(jobmanager.jobworkers[cam_id].side_filter_size);
+    ui->spinBox_side_filter_size_2->setValue(jobmanager.jobworkers[cam_id].side_filter_size2);
 
     isLoading = false;
 }
@@ -1152,5 +1153,15 @@ void MainWindow::on_checkBox_showBox_clicked(bool checked)
 {
     showResult(checked);
 
+}
+
+
+void MainWindow::on_spinBox_side_filter_size_2_valueChanged(int arg1)
+{
+    if(isLoading)
+    {
+        return;
+    }
+    jobmanager.jobworkers[cam_id].side_filter_size2 = arg1;
 }
 

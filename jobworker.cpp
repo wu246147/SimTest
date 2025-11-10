@@ -28,6 +28,8 @@ Jobworker::Jobworker(const Jobworker &jobworker)
     abnormalThre = jobworker.abnormalThre;
     filter_defect_area_abnormal = jobworker.filter_defect_area_abnormal;
     side_filter_size = jobworker.side_filter_size;
+    side_filter_size2 = jobworker.side_filter_size2;
+
     polygonMasks = jobworker.polygonMasks;
 
 
@@ -1213,6 +1215,7 @@ void Jobworker::initSupervisedModel(std::string supervisedModelPath)
     {
         if(QFile::exists(pathOnnxFile))
         {
+            LOGE("start transform Supervised Model");
 
             defectDet.wtsToEngine(pathOnnxFile.toStdString(), pathTRTFile.toStdString(), modelSize, TclassNames.size());
         }

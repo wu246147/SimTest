@@ -215,6 +215,8 @@ private slots:
 
     void on_checkBox_showBox_clicked(bool checked);
 
+    void on_spinBox_side_filter_size_2_valueChanged(int arg1);
+
 private:
     Ui::MainWindow *ui;
 };
