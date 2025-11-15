@@ -60,18 +60,20 @@ link_directories(${TRT_DIR}/lib)
 # link_libraries(${TRT_LIB})
 
 #统一打包
-set(LIB_DIR "${PROJECT_SOURCE_DIR}/lib/x64-win64")
+set(LIB_DIR "${PROJECT_SOURCE_DIR}/../Painting_Defect_Detect/lib/x64-win64")
+set(LIB_DIR2 "${PROJECT_SOURCE_DIR}/lib/x64-win64")
 
 #opencv
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${PROJECT_SOURCE_DIR}/../Painting_Defect_Detect/include)
+include_directories(${PROJECT_SOURCE_DIR}/include/algorithm)
 file(GLOB OPENCV_LIBS "${LIB_DIR}/opencv/*.lib")
 
 # message(${PROJECT_SOURCE_DIR}/../Painting_Defect_Detect/include)
 
 #log display alg（det ad）
-include_directories(${PROJECT_SOURCE_DIR}/include/algorithm)
+include_directories(${PROJECT_SOURCE_DIR}/../Painting_Defect_Detect/include/algorithm)
 file(GLOB ALGORITHM_LIBS "${LIB_DIR}/algorithm/*.lib")
-
+file(GLOB ALGORITHM_LIBS2 "${LIB_DIR2}/algorithm/*.lib")
 
 set(PROJECT_SOURCES
         Image.qrc
@@ -97,7 +99,7 @@ add_executable(SimTest
 
 
 target_link_libraries(SimTest Qt5::Widgets Qt5::Xml Qt5::Concurrent Qt5::Network Qt5::Sql Qt5::Charts Qt5::Concurrent)
-target_link_libraries(SimTest  ${OPENCV_LIBS} ${ALGORITHM_LIBS} )
+target_link_libraries(SimTest  ${OPENCV_LIBS} ${ALGORITHM_LIBS} ${ALGORITHM_LIBS2} )
 target_link_libraries(SimTest nvinfer)
 target_link_libraries(SimTest ${CUDA_LIBRARIES})
 target_link_libraries(SimTest Threads::Threads)

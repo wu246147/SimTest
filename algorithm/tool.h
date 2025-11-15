@@ -2,6 +2,7 @@
 #define TOOL_H
 #include <opencv2/opencv.hpp>
 #include "imgprocesstool.h"
+
 #include "QImage"
 #include "QDir"
 #include "QPixmap"
