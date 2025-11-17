@@ -28,6 +28,8 @@
 
 #include "jobmanager.h"
 
+#include "algorithm/tool.h"
+
 
 static inline void runInMainThread(std::function<void()> fn)
 {
@@ -216,6 +218,8 @@ private slots:
     void on_checkBox_showBox_clicked(bool checked);
 
     void on_spinBox_side_filter_size_2_valueChanged(int arg1);
+
+    void on_spinBox_id_valueChanged(int arg1);
 
 private:
     Ui::MainWindow *ui;

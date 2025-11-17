@@ -211,7 +211,7 @@ void MainWindow::showResult(bool isShowBox)
                 result_item->setPen(pn);
                 item_list.push_back(result_item);
 
-                MyTextItem *item_text = new MyTextItem((defect_types[id] + " " + std::to_string(defect_areas[id])).data());
+                MyTextItem *item_text = new MyTextItem((defect_types[id] + " " + std::to_string(defect_areas[id]) + " " + to_string_with_precision(defect_scores[id], 3)).data());
 
 
                 float scale = std::min((float)display->myGraphicsView->height() / (jobmanager.jobworkers[cam_id].img.rows / showImgScaleSize),
@@ -454,6 +454,16 @@ void MainWindow::runOver()
         updataCamResult();
     });
 
+    QStringList rt = {std::to_string(tmpSrcImgIdList[0]).data()};
+
+    for(int id = 0; id < jobmanager.jobworkers.size(); ++id)
+    {
+        int r = jobmanager.jobworkers[id].getStatistics();
+        rt.push_back(std::to_string(r).data());
+    }
+    //结果文件添加记录
+    appendCsvLine("result.csv", rt);
+
     isBusy = false;
 
 }
@@ -631,7 +641,11 @@ void MainWindow::on_pushButton_runNext_clicked()
     }
     runInMainThread([ = ]
     {
-        ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+        isLoading = true;
+
+        ui->spinBox_id->setValue(tmpSrcImgIdList[cam_id]);
+        isLoading = false;
+
     });
 
     on_pushButton_run_clicked();
@@ -698,6 +712,10 @@ void MainWindow::on_pushButton_runAll_clicked(bool isclicked)
 
     QFuture<void> f = QtConcurrent::run([ = ]()
     {
+
+
+
+
         while(tmpSrcImgIdList[0] < (int)(src_image_paths.size() - 1) && isRunning == true)
         {
             std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();
@@ -742,7 +760,10 @@ void MainWindow::on_pushButton_runAll_clicked(bool isclicked)
 
             runInMainThread([ = ]
             {
-                ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+                isLoading = true;
+
+                ui->spinBox_id->setValue(tmpSrcImgIdList[cam_id]);
+                isLoading = false;
             });
 
             //清空界面
@@ -1067,7 +1088,10 @@ void MainWindow::on_pushButton_reset_clicked()
     jobmanager.resetStatistics();
 
     //界面刷新
-    ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+    isLoading = true;
+
+    ui->spinBox_id->setValue(tmpSrcImgIdList[cam_id]);
+    isLoading = false;
 
     ui->label_result->setStyleSheet("QLabel{color:rgb(128,128,128); font: 700 24pt \"Microsoft YaHei UI\";}");
     ui->label_result->setText("--");
@@ -1077,6 +1101,12 @@ void MainWindow::on_pushButton_reset_clicked()
     resetStatisticsData();
     resetCamResult();
 
+    //清空记录
+    QFile rtFile("result.csv");
+    if(rtFile.exists())
+    {
+        rtFile.remove();
+    }
 }
 
 
@@ -1128,7 +1158,10 @@ void MainWindow::on_pushButton_runLast_clicked()
         jobmanager.jobworkers[id].readJsonstd(labelme_path);
     }
 
-    ui->label_id->setText(std::to_string(tmpSrcImgIdList[cam_id]).data());
+    isLoading = true;
+
+    ui->spinBox_id->setValue(tmpSrcImgIdList[cam_id]);
+    isLoading = false;
 
 
     on_pushButton_run_clicked();
@@ -1164,4 +1197,38 @@ void MainWindow::on_spinBox_side_filter_size_2_valueChanged(int arg1)
     }
     jobmanager.jobworkers[cam_id].side_filter_size2 = arg1;
 }
+
+
+void MainWindow::on_spinBox_id_valueChanged(int arg1)
+{
+    if(isLoading)
+    {
+        return;
+    }
+    std::string src_image_dir = ui->lineEdit_imgDir->text().toStdString();
+
+    std::string cam_image_dir  = src_image_dir + "/Cam" + std::to_string(0 + 1) + "/origin";
+    std::string label_dir  = src_image_dir + "/Cam" + std::to_string(0 + 1) + "_labelme";
+
+    //测试
+    std::vector<std::string> src_image_paths;
+
+    // LOGE("222");
+    get_files(cam_image_dir, &src_image_paths);
+
+    if(arg1 <= src_image_paths.size() - 1)
+    {
+        for(int id = 0; id < tmpSrcImgIdList.size(); ++id)
+        {
+            tmpSrcImgIdList[id] = arg1;
+        }
+    }
+    else
+    {
+        return;
+    }
+
+
+}
+
 

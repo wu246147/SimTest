@@ -288,7 +288,7 @@ color: #FFFFFF;</string>
          <item row="3" column="1">
           <widget class="QLineEdit" name="lineEdit_superviseModel">
            <property name="text">
-            <string>E:\code\project\Wuhan_Painting_Inspection\defectDet\side_123456789ab</string>
+            <string>E:\code\project\Wuhan_Painting_Inspection\defectDet\side_123456789abcde</string>
            </property>
           </widget>
          </item>
@@ -354,16 +354,6 @@ QPushButton:pressed
            </property>
           </widget>
          </item>
-         <item row="9" column="1">
-          <widget class="QLabel" name="label_id">
-           <property name="text">
-            <string>-1</string>
-           </property>
-           <property name="alignment">
-            <set>Qt::AlignCenter</set>
-           </property>
-          </widget>
-         </item>
          <item row="10" column="0">
           <widget class="QPushButton" name="pushButton_runLast">
            <property name="enabled">
@@ -393,7 +383,7 @@ QPushButton:pressed
          <item row="2" column="1">
           <widget class="QLineEdit" name="lineEdit_imgDir">
            <property name="text">
-            <string>E:\data\Wuhan_Painting_Inspection\scene\trainData\side\origin_data\side_20251105</string>
+            <string>E:\data\Wuhan_Painting_Inspection\testData\side\Cut_1116\ALL_change</string>
            </property>
           </widget>
          </item>
@@ -424,7 +414,7 @@ QPushButton:pressed
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>-78</y>
+              <y>-67</y>
               <width>333</width>
               <height>571</height>
              </rect>
@@ -571,7 +561,7 @@ QPushButton:pressed
                 <item row="5" column="0">
                  <widget class="QLabel" name="label_71">
                   <property name="text">
-                   <string>上下边缘缺陷过滤</string>
+                   <string>左右边缘缺陷过滤</string>
                   </property>
                  </widget>
                 </item>
@@ -623,7 +613,7 @@ QPushButton:pressed
                 <item row="6" column="0">
                  <widget class="QLabel" name="label_72">
                   <property name="text">
-                   <string>左右边缘缺陷过滤</string>
+                   <string>上下边缘缺陷过滤</string>
                   </property>
                  </widget>
                 </item>
@@ -761,7 +751,7 @@ QPushButton:pressed
          <item row="4" column="1">
           <widget class="QLineEdit" name="lineEdit_unsuperviseModel">
            <property name="text">
-            <string>E:\code\project\Wuhan_Painting_Inspection\anomalyDet\model_0908</string>
+            <string>E:\code\project\Wuhan_Painting_Inspection\anomalyDet\model_0908_1117</string>
            </property>
           </widget>
          </item>
@@ -867,6 +857,16 @@ QPushButton:pressed
            </property>
            <property name="checkable">
             <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="9" column="1">
+          <widget class="QSpinBox" name="spinBox_id">
+           <property name="minimum">
+            <number>-1</number>
+           </property>
+           <property name="maximum">
+            <number>999999</number>
            </property>
           </widget>
          </item>

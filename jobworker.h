@@ -76,6 +76,8 @@ public:
 
     void statistics();
 
+    int getStatistics();
+
     void resetStatistics();
 
     bool isUsed();

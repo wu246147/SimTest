@@ -2,6 +2,36 @@
 #include "mylog.h"
 
 
+bool appendCsvLine(const QString &filePath,
+                   const QStringList &cells,
+                   QChar sep)
+{
+    QStringList escaped;
+    escaped.reserve(cells.size());
+
+    for(QString cell : cells)
+    {
+        // // 是否需要引号包围
+        // if(cell.contains(sep) || cell.contains(u'"') || cell.contains(u'\n') || cell.contains(u'\r'))
+        // {
+        //     cell.replace(u'"', u"\"\"");          // 内部 " 变 ""
+        //     cell = u'"' + cell + u'"';
+        // }
+        escaped << cell;
+    }
+
+    QFile f(filePath);
+    if(!f.open(QIODevice::WriteOnly | QIODevice::Append | QIODevice::Text))
+    {
+        return false;
+    }
+
+    QTextStream ts(&f);
+    ts.setCodec("UTF-8");
+    ts << escaped.join(sep) << Qt::endl;
+    return true;
+}
+
 template <typename T>
 std::string to_string_with_precision(const T a_value, const int n)
 {

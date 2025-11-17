@@ -602,6 +602,40 @@ void Jobworker::statistics()
 
 }
 
+int Jobworker::getStatistics()
+{
+    if(labelResult)
+    {
+        //用的话，才考虑进去
+        if(result() || !isUsed())
+        {
+            //
+            return 0;
+
+        }
+        else
+        {
+            // 误检
+            return 2;
+
+        }
+    }
+    else
+    {
+        //用的话，才考虑进去
+        if(result() && isUsed())
+        {
+            // 漏检
+            return 3;
+
+        }
+        else
+        {
+            return 1;
+        }
+    }
+}
+
 void Jobworker::resetStatistics()
 {
     tp = 0;

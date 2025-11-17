@@ -7,6 +7,12 @@
 #include "QDir"
 #include "QPixmap"
 #include "QException"
+#include "QString"
+#include "QTextStream"
+
+bool appendCsvLine(const QString &filePath,
+                   const QStringList &cells,
+                   QChar sep = u',');
 
 template <typename T>
 std::string to_string_with_precision(const T a_value, const int n = 6);
