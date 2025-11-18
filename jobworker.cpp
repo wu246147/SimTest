@@ -1122,8 +1122,8 @@ void Jobworker::loadDetToolPara(std::string strFile)
     side_filter_size = abnormalDetParaObject["side_filter_size"].toInt();
 
     //后面现场改了后，再启用
-    side_filter_size2 = abnormalDetParaObject["side_filter_size"].toInt();
-    // side_filter_size2 = abnormalDetParaObject["side_filter_size2"].toInt();
+    // side_filter_size2 = abnormalDetParaObject["side_filter_size"].toInt();
+    side_filter_size2 = abnormalDetParaObject["side_filter_size2"].toInt();
 
 
 }
