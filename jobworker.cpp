@@ -789,92 +789,92 @@ void Jobworker::getCurrentDefectInfo(std::string save_data_path, std::string sav
                 defect_areas.push_back(defect_area);
 
             }
-
-            if(isUseAnomalDet)
-            {
-                for(int id = 0; id < abnormalDetScores.size(); ++id)
-                {
-                    long long produceTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
-                    std::string fileName = std::to_string(produceTime) + "_ab_defect_det_" + std::to_string(id) + ".png";
-
-                    float locateOCRScore;
-                    float locateOCRX ;
-                    float locateOCRY ;
-                    float locateOCRW ;
-                    float locateOCRH ;
-                    int expend_size = 50;
-                    locateOCRScore = abnormalDetScores[id];
-                    locateOCRX = abnormalDetXs[id];
-                    locateOCRY = abnormalDetYs[id];
-                    locateOCRW = abnormalDetWs[id];
-                    locateOCRH = abnormalDetHs[id];
-
-                    cv::RotatedRect resultRectOrigin(cv::Point2f(locateOCRX + locateOCRW / 2, locateOCRY + locateOCRH / 2),
-                                                     cv::Size2f(locateOCRW, locateOCRH), 0);
-                    cv::RotatedRect resultRectTransform;
-
-                    resultRectTransform = resultRectOrigin;
-
-                    // std::vector<cv::Point2f> modelROIPointsTransformSort = modelROIPointsTransform;
-
-
-                    // //保证点按照左上、右上、右下、左下顺序排列
-                    // ImgAlg::SortPoint(modelROIPointsTransformSort);
-
-                    // cv::Mat H, H_Inv;
-                    // ImgAlg::getPerspectiveTransform(modelROIPointsTransformSort, H);
-
-                    // H_Inv = H.inv();
-                    // ImgAlg::transformROI(H_Inv, resultRectOrigin, resultRectTransform);
-
-                    cv::Rect roi(resultRectTransform.boundingRect());
-
-                    int defect_area = roi.area();
-
-                    float xL = std::max((0), roi.x - expend_size);
-                    float xR = std::min((img.cols), roi.x + roi.width + expend_size);
-                    float yL = std::max((0), roi.y - expend_size);
-                    float yR = std::min((img.rows), roi.y + roi.height + expend_size);
-                    roi = cv::Rect(xL, yL, (xR - xL), (yR - yL));
-
-                    if(roi.width <= 0 || roi.height <= 0)
-                    {
-                        //结果框为空
-                        continue;
-                    }
-                    // if(is_save_defect_img)
-                    // {
-                    //     // 保证图片不为空
-                    //     if(img.empty())
-                    //     {
-                    //         continue;
-                    //     }
-                    //     cv::Mat defectImg = img(roi).clone();
-                    //     // cv::imwrite(save_data_path + "\\" + fileName, defectImg);
-                    //     QtConcurrent::run(this, &JobWorker::saveImage, save_data_path + "\\" + fileName, defectImg);
-                    //     // saveImage(save_data_path + "\\" + fileName, defectImg);
-
-                    // }
-                    //sql 保存数据整理
-                    char defect_location[256];
-                    sprintf(defect_location, "%d,%d,%d,%d", int(xL), int(yL), int(xR - xL), int(yR - yL));
-
-                    std::string defect_img_path = save_data_path_sql + "\\" + fileName;
-                    replaceAll(defect_img_path, "\\", "\\\\");
-                    replaceAll(defect_img_path, "/", "\\\\");
-
-                    defect_img_paths.push_back(defect_img_path);
-                    defect_types.push_back("其他");
-                    defect_locations.push_back(defect_location);
-                    defect_scores.push_back(locateOCRScore);
-
-                    defect_areas.push_back(abnormalDetAreas[id]);
-
-                }
-            }
-
-
         }
+        if(isUseAnomalDet)
+        {
+            for(int id = 0; id < abnormalDetScores.size(); ++id)
+            {
+                long long produceTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                std::string fileName = std::to_string(produceTime) + "_ab_defect_det_" + std::to_string(id) + ".png";
+
+                float locateOCRScore;
+                float locateOCRX ;
+                float locateOCRY ;
+                float locateOCRW ;
+                float locateOCRH ;
+                int expend_size = 50;
+                locateOCRScore = abnormalDetScores[id];
+                locateOCRX = abnormalDetXs[id];
+                locateOCRY = abnormalDetYs[id];
+                locateOCRW = abnormalDetWs[id];
+                locateOCRH = abnormalDetHs[id];
+
+                cv::RotatedRect resultRectOrigin(cv::Point2f(locateOCRX + locateOCRW / 2, locateOCRY + locateOCRH / 2),
+                                                 cv::Size2f(locateOCRW, locateOCRH), 0);
+                cv::RotatedRect resultRectTransform;
+
+                resultRectTransform = resultRectOrigin;
+
+                // std::vector<cv::Point2f> modelROIPointsTransformSort = modelROIPointsTransform;
+
+
+                // //保证点按照左上、右上、右下、左下顺序排列
+                // ImgAlg::SortPoint(modelROIPointsTransformSort);
+
+                // cv::Mat H, H_Inv;
+                // ImgAlg::getPerspectiveTransform(modelROIPointsTransformSort, H);
+
+                // H_Inv = H.inv();
+                // ImgAlg::transformROI(H_Inv, resultRectOrigin, resultRectTransform);
+
+                cv::Rect roi(resultRectTransform.boundingRect());
+
+                int defect_area = roi.area();
+
+                float xL = std::max((0), roi.x - expend_size);
+                float xR = std::min((img.cols), roi.x + roi.width + expend_size);
+                float yL = std::max((0), roi.y - expend_size);
+                float yR = std::min((img.rows), roi.y + roi.height + expend_size);
+                roi = cv::Rect(xL, yL, (xR - xL), (yR - yL));
+
+                if(roi.width <= 0 || roi.height <= 0)
+                {
+                    //结果框为空
+                    continue;
+                }
+                // if(is_save_defect_img)
+                // {
+                //     // 保证图片不为空
+                //     if(img.empty())
+                //     {
+                //         continue;
+                //     }
+                //     cv::Mat defectImg = img(roi).clone();
+                //     // cv::imwrite(save_data_path + "\\" + fileName, defectImg);
+                //     QtConcurrent::run(this, &JobWorker::saveImage, save_data_path + "\\" + fileName, defectImg);
+                //     // saveImage(save_data_path + "\\" + fileName, defectImg);
+
+                // }
+                //sql 保存数据整理
+                char defect_location[256];
+                sprintf(defect_location, "%d,%d,%d,%d", int(xL), int(yL), int(xR - xL), int(yR - yL));
+
+                std::string defect_img_path = save_data_path_sql + "\\" + fileName;
+                replaceAll(defect_img_path, "\\", "\\\\");
+                replaceAll(defect_img_path, "/", "\\\\");
+
+                defect_img_paths.push_back(defect_img_path);
+                defect_types.push_back("其他");
+                defect_locations.push_back(defect_location);
+                defect_scores.push_back(locateOCRScore);
+
+                defect_areas.push_back(abnormalDetAreas[id]);
+
+            }
+        }
+
+
+
 
     }
     catch(cv::Exception &e)

@@ -383,7 +383,7 @@ QPushButton:pressed
          <item row="2" column="1">
           <widget class="QLineEdit" name="lineEdit_imgDir">
            <property name="text">
-            <string>E:\data\Wuhan_Painting_Inspection\testData\side\Cut_1116\ALL_change</string>
+            <string>E:\data\Wuhan_Painting_Inspection\testData\side\Cut_1121</string>
            </property>
           </widget>
          </item>
@@ -414,7 +414,7 @@ QPushButton:pressed
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>-67</y>
+              <y>0</y>
               <width>333</width>
               <height>571</height>
              </rect>
@@ -700,7 +700,7 @@ QPushButton:pressed
          <item row="1" column="1">
           <widget class="QLineEdit" name="lineEdit_jsonFile">
            <property name="text">
-            <string>E:\code\project\Wuhan_Painting_Inspection\model\side_para\ID19_MT</string>
+            <string>E:\code\project\Wuhan_Painting_Inspection\model\1121\job\side\FY22_TWR</string>
            </property>
           </widget>
          </item>
